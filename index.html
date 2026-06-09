@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Enesta Plants & Equipments - POS | TZS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Light mode (default) */
+        :root {
+            --bg-body: #f0f2f5;
+            --text-primary: #1e293b;
+            --card-bg: white;
+            --card-border: #eef2f6;
+            --header-bg: white;
+            --header-border: #eef2f6;
+            --stat-card-bg: white;
+            --stat-border: #e9eef3;
+            --input-bg: white;
+            --input-border: #cfdee9;
+            --input-focus: #2c6e2f;
+            --btn-primary-bg: #1f4f2b;
+            --btn-primary-hover: #0f3a1a;
+            --btn-secondary-bg: #eef2ff;
+            --btn-secondary-color: #2c3e50;
+            --btn-outline-color: #334155;
+            --btn-outline-border: #cbd5e1;
+            --btn-whatsapp: #25D366;
+            --btn-whatsapp-hover: #128C7E;
+            --btn-email: #3b82f6;
+            --btn-email-hover: #2563eb;
+            --ceo-settings-bg: #f1f5f9;
+            --table-header-bg: #f8fafc;
+            --table-border: #ecf3f8;
+            --action-icon: #6c86a3;
+            --action-edit-hover: #2c6e2f;
+            --action-delete-hover: #dc2626;
+            --empty-row-color: #6b7280;
+            --modal-bg: white;
+            --info-note: #4b5563;
+            --login-gradient-start: #0f2b1d;
+            --login-gradient-end: #1a4a2a;
+        }
+
+        /* Dark mode - neutral dark (no blue tones) */
+        body.dark {
+            --bg-body: #0a0a0a;
+            --text-primary: #e5e5e5;
+            --card-bg: #1a1a1a;
+            --card-border: #2a2a2a;
+            --header-bg: #1a1a1a;
+            --header-border: #2a2a2a;
+            --stat-card-bg: #1a1a1a;
+            --stat-border: #2a2a2a;
+            --input-bg: #0f0f0f;
+            --input-border: #333333;
+            --input-focus: #2c6e2f;
+            --btn-primary-bg: #2c6e2f;
+            --btn-primary-hover: #1f4f2b;
+            --btn-secondary-bg: #2c2c2c;
+            --btn-secondary-color: #e5e5e5;
+            --btn-outline-color: #cccccc;
+            --btn-outline-border: #444444;
+            --btn-whatsapp: #25D366;
+            --btn-whatsapp-hover: #128C7E;
+            --btn-email: #3b82f6;
+            --btn-email-hover: #2563eb;
+            --ceo-settings-bg: #111111;
+            --table-header-bg: #111111;
+            --table-border: #2a2a2a;
+            --action-icon: #a0a0a0;
+            --action-edit-hover: #4ade80;
+            --action-delete-hover: #f87171;
+            --empty-row-color: #a0a0a0;
+            --modal-bg: #1a1a1a;
+            --info-note: #a0a0a0;
+            --login-gradient-start: #0a0a0a;
+            --login-gradient-end: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        body {
+            background: var(--bg-body);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        button, .btn, .btn-sm, .login-btn, .whatsapp-btn, .email-btn, .btn-save-email, .btn-save-wa,
+        .btn-primary, .btn-secondary, .btn-outline, .logout-btn, .change-pw-btn,
+        .inline-btn, #saveProfileBtn, #closeModalBtn, #clearSearchBtn, #clearAllBtn,
+        #cancelEditBtn, #submitBtn, .action-icons i, .profile-pic, .profile-preview {
+            outline: none !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        button, .btn, .btn-sm, .login-btn, .whatsapp-btn, .email-btn, .btn-save-email, .btn-save-wa,
+        .btn-primary, .btn-secondary, .btn-outline, .logout-btn, .change-pw-btn,
+        .inline-btn, #saveProfileBtn, #closeModalBtn, #clearSearchBtn, #clearAllBtn,
+        #cancelEditBtn, #submitBtn {
+            border-radius: 12px !important;
+        }
+        .btn-primary, .login-btn, #submitBtn {
+            background: var(--btn-primary-bg);
+            color: white;
+        }
+        .btn-primary:hover, .login-btn:hover, #submitBtn:hover {
+            background: var(--btn-primary-hover);
+        }
+        .btn-secondary, #cancelEditBtn, #closeModalBtn {
+            background: var(--btn-secondary-bg);
+            color: var(--btn-secondary-color);
+        }
+        .btn-outline, #clearAllBtn {
+            background: transparent;
+            color: var(--btn-outline-color);
+            border: 1px solid var(--btn-outline-border) !important;
+        }
+        .whatsapp-btn {
+            background: var(--btn-whatsapp);
+            color: white;
+        }
+        .whatsapp-btn:hover {
+            background: var(--btn-whatsapp-hover);
+        }
+        .email-btn, .btn-save-email {
+            background: var(--btn-email);
+            color: white;
+        }
+        .email-btn:hover, .btn-save-email:hover {
+            background: var(--btn-email-hover);
+        }
+        .btn-save-wa {
+            background: #25D366;
+            color: white;
+        }
+        .btn-save-wa:hover {
+            background: #128C7E;
+        }
+        #clearSearchBtn {
+            background: var(--btn-email);
+            color: white;
+        }
+        #clearSearchBtn:hover {
+            background: var(--btn-email-hover);
+        }
+        .profile-pic, .profile-preview {
+            border: 2px solid #2c6e2f !important;
+            border-radius: 50% !important;
+            object-fit: cover;
+        }
+        /* LARGER INPUTS */
+        input, select, textarea {
+            outline: none !important;
+            box-shadow: none !important;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-primary);
+            padding: 14px 18px !important;
+            font-size: 1rem !important;
+            border-radius: 16px;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus, select:focus {
+            border-color: var(--input-focus);
+        }
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--login-gradient-start) 0%, var(--login-gradient-end) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .login-card {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 32px 28px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+        }
+        .login-card .logo-icon { font-size: 90px; color: #2c6e2f; margin-bottom: 16px; }
+        .login-card h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e4620, #2c6e2f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px !important;
+            border-radius: 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem !important;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            font-size: 1rem;
+        }
+        .error-msg { color: #dc2626; font-size: 0.75rem; margin-top: 12px; }
+        .pos-content { display: none; padding: 24px 20px; }
+        .pos-container { max-width: 1440px; margin: 0 auto; }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--header-bg);
+            padding: 12px 24px;
+            border-radius: 60px;
+            margin-bottom: 24px;
+            border: 1px solid var(--header-border);
+        }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
+        .logo-container i { font-size: 52px; color: #2c6e2f; }
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e4620, #2c6e2f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .profile-area { display: flex; align-items: center; gap: 16px; }
+        .profile-pic { width: 44px; height: 44px; cursor: pointer; }
+        .profile-name { font-weight: 600; }
+        .logout-btn, .change-pw-btn, .dark-mode-toggle {
+            background: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            padding: 6px 12px;
+        }
+        .dark-mode-toggle i {
+            font-size: 1.2rem;
+        }
+        .stats-row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 32px; }
+        .stat-card {
+            background: var(--stat-card-bg);
+            border-radius: 24px;
+            padding: 18px 24px;
+            flex: 1 1 200px;
+            border: 1px solid var(--stat-border);
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #5b6e8c;
+            margin-bottom: 8px;
+        }
+        body.dark .stat-label {
+            color: #a0a0a0;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f2b1d;
+        }
+        body.dark .stat-value {
+            color: #86efac;
+        }
+        .pos-layout { display: flex; flex-direction: column; gap: 28px; }
+        @media (min-width: 960px) {
+            .pos-layout { flex-direction: row; align-items: flex-start; }
+            .form-card { flex: 0 0 360px; position: sticky; top: 20px; }
+            .purchases-section { flex: 1; }
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .card-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-body { padding: 24px; }
+        .form-group { margin-bottom: 22px; }
+        .total-preview {
+            background: var(--ceo-settings-bg);
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-top: 10px;
+            font-weight: 500;
+            text-align: right;
+            font-size: 0.95rem;
+        }
+        .btn {
+            padding: 14px 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+        .flex-btns { display: flex; gap: 12px; margin-top: 12px; }
+        .search-area { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+        .search-input { flex: 1; position: relative; }
+        .search-input i {
+            position: absolute;
+            left: 18px;
+            top: 18px;
+            color: #94a3b8;
+        }
+        .search-input input { padding-left: 48px !important; }
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--table-border);
+        }
+        th {
+            background: var(--table-header-bg);
+            font-weight: 600;
+        }
+        .action-icons i {
+            font-size: 1.1rem;
+            margin: 0 6px;
+            cursor: pointer;
+            color: var(--action-icon);
+        }
+        .action-icons i.fa-edit:hover { color: var(--action-edit-hover); }
+        .action-icons i.fa-trash-alt:hover { color: var(--action-delete-hover); }
+        .empty-row td { text-align: center; padding: 40px; color: var(--empty-row-color); }
+        .footer-actions { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+        .btn-sm { width: auto; padding: 10px 18px; font-size: 0.85rem; }
+        .ceo-settings {
+            background: var(--ceo-settings-bg);
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+        .inline-btn { width: auto; padding: 8px 16px; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+        .modal-card {
+            background: var(--modal-bg);
+            border-radius: 28px;
+            padding: 28px;
+            width: 90%;
+            max-width: 450px;
+            color: var(--text-primary);
+        }
+        .profile-upload { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .profile-preview { width: 100px; height: 100px; }
+        .info-note {
+            font-size: 0.75rem;
+            color: var(--info-note);
+            margin-top: 6px;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 640px) {
+            .brand-name { font-size: 1.3rem; }
+            .logo-container i { font-size: 36px; }
+            .login-card .logo-icon { font-size: 70px; }
+            input, select, textarea { padding: 12px 14px !important; font-size: 0.9rem !important; }
+            .btn { padding: 12px 14px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN PAGE -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-card">
+            <div class="logo-icon"><i class="fas fa-hard-hat"></i></div>
+            <h2>Enesta Plants and EquipmentsPOS</h2>
+            <p style="margin-bottom: 24px;">Construction Procurement System</p>
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="loginUsername" placeholder="admin">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••">
+            </div>
+            <button id="loginBtn" class="login-btn">Login <i class="fas fa-arrow-right"></i></button>
+            <div id="loginError" class="error-msg"></div>
+        </div>
+    </div>
+
+    <!-- MAIN POS CONTENT -->
+    <div id="posContent" class="pos-content">
+        <div class="pos-container">
+            <div class="top-bar">
+                <div class="logo-container">
+                    <i class="fas fa-hard-hat"></i>
+                    <span class="brand-name">Enesta Plants and EquipmentsPOS</span>
+                </div>
+                <div class="profile-area">
+                    <button id="darkModeToggle" class="dark-mode-toggle"><i class="fas fa-moon"></i></button>
+                    <img id="profileImg" class="profile-pic" src="https://ui-avatars.com/api/?background=2c6e2f&color=fff&name=Admin" alt="profile">
+                    <span class="profile-name" id="profileName">Admin</span>
+                    <button id="changePasswordBtn" class="change-pw-btn"><i class="fas fa-key"></i> Change Password</button>
+                    <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card"><div class="stat-label">TOTAL SPENT (TZS)</div><div class="stat-value" id="totalSpentAmount">TZS 0</div><div class="stat-sub">All-time purchases</div></div>
+                <div class="stat-card"><div class="stat-label">PURCHASES</div><div class="stat-value" id="totalTransactions">0</div><div class="stat-sub">Total orders</div></div>
+                <div class="stat-card"><div class="stat-label">AVG. PURCHASE</div><div class="stat-value" id="avgPurchase">TZS 0</div><div class="stat-sub">Per transaction</div></div>
+            </div>
+
+            <div class="pos-layout">
+                <div class="form-card card">
+                    <div class="card-header"><h2><i class="fas fa-cart-plus"></i> <span id="formTitle">Record Purchase</span></h2></div>
+                    <div class="card-body">
+                        <form id="purchaseForm">
+                            <div class="form-group"><label><i class="fas fa-cube"></i> Material / Item *</label><input type="text" id="itemName" placeholder="e.g., Simiti, Rebar" required></div>
+                            <div class="form-group"><label><i class="fas fa-building"></i> Supplier</label><input type="text" id="supplier" placeholder="Mwasiti Supplies"></div>
+                            <div class="form-group"><label><i class="fas fa-weight-hanging"></i> Quantity *</label><input type="number" id="quantity" step="0.01" min="0.01" value="1" required></div>
+                            <div class="form-group"><label><i class="fas fa-tag"></i> Unit Price (TZS) *</label><input type="number" id="unitPrice" step="0.01" min="0.01" placeholder="e.g., 28000" required></div>
+                            <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Purchase Date *</label><input type="date" id="purchaseDate" required></div>
+                            <div class="total-preview" id="liveTotalPreview"><i class="fas fa-calculator"></i> Line total: TZS 0</div>
+                            <button type="submit" id="submitBtn" class="btn btn-primary"><i class="fas fa-save"></i> Add Purchase</button>
+                            <div class="flex-btns"><button type="button" id="cancelEditBtn" class="btn btn-secondary" style="display: none;"><i class="fas fa-times"></i> Cancel Edit</button></div>
+                        </form>
+                        <hr><div style="font-size: 0.75rem; text-align: center;">Data saved locally • TZS • Delete entry directly</div>
+                    </div>
+                </div>
+
+                <div class="purchases-section card">
+                    <div class="card-header"><h2><i class="fas fa-clipboard-list"></i> All Company Purchases (TZS)</h2></div>
+                    <div class="card-body">
+                        <div class="ceo-settings">
+                            <i class="fas fa-envelope" style="color:#2563eb;"></i>
+                            <label>CEO Email:</label>
+                            <input type="email" id="ceoEmailInput" placeholder="ceo@construction.co.tz">
+                            <button id="saveCeoEmailBtn" class="btn-save-email inline-btn btn-sm">Save Email</button>
+                        </div>
+                        <div class="ceo-settings">
+                            <i class="fab fa-whatsapp" style="color:#25D366;"></i>
+                            <label>WhatsApp Numbers (comma separated):</label>
+                            <input type="text" id="ceoWhatsappInput" placeholder="e.g., 255713381496, 255712345678" value="255713381496">
+                            <button id="saveCeoWhatsappBtn" class="btn-save-wa inline-btn btn-sm">Save Numbers</button>
+                        </div>
+                        <div class="info-note"><i class="fas fa-info-circle"></i> Separate multiple numbers with commas. Clicking WhatsApp Report will open a chat for each number (allow popups).</div>
+
+                        <div class="search-area">
+                            <div class="search-input"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search by material, supplier..."></div>
+                            <button id="clearSearchBtn" class="btn-save-email btn-sm">Clear</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table id="purchasesTable">
+                                <thead><tr><th>Item</th><th>Supplier</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Date</th><th>Actions</th></tr></thead>
+                                <tbody id="tableBody"><tr class="empty-row"><td colspan="7">No purchases recorded.</td></tr></tbody>
+                            </table>
+                        </div>
+                        <div class="footer-actions">
+                            <div style="display: flex; gap: 8px;">
+                                <button id="whatsappReportBtn" class="btn-sm whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp Report to All</button>
+                                <button id="emailDailyReportBtn" class="btn-sm email-btn"><i class="fas fa-envelope"></i> Email Daily Report</button>
+                            </div>
+                            <button id="clearAllBtn" class="btn-outline btn-sm"><i class="fas fa-trash-alt"></i> Delete All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Change Password & Profile Photo -->
+    <div id="profileModal" class="modal">
+        <div class="modal-card">
+            <h3><i class="fas fa-user-cog"></i> Profile Settings</h3>
+            <div class="profile-upload">
+                <img id="modalProfilePreview" class="profile-preview" src="https://ui-avatars.com/api/?background=2c6e2f&color=fff&name=Admin">
+                <label class="btn-outline btn-sm" style="cursor:pointer;"><i class="fas fa-upload"></i> Change Photo <input type="file" id="profileUpload" accept="image/*" style="display:none;"></label>
+            </div>
+            <div class="input-group"><label>New Password</label><input type="password" id="newPassword" placeholder="Enter new password"></div>
+            <div class="input-group"><label>Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm new password"></div>
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <button id="saveProfileBtn" class="btn-primary" style="width:auto; padding: 8px 20px;">Save Changes</button>
+                <button id="closeModalBtn" class="btn-secondary" style="width:auto;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- DARK MODE ----------
+        function initDarkMode() {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            if (darkMode) {
+                document.body.classList.add('dark');
+                const toggleIcon = document.querySelector('#darkModeToggle i');
+                if (toggleIcon) toggleIcon.className = 'fas fa-sun';
+            } else {
+                document.body.classList.remove('dark');
+                const toggleIcon = document.querySelector('#darkModeToggle i');
+                if (toggleIcon) toggleIcon.className = 'fas fa-moon';
+            }
+        }
+        function toggleDarkMode() {
+            const isDark = document.body.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            const toggleIcon = document.querySelector('#darkModeToggle i');
+            if (toggleIcon) {
+                toggleIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+
+        // ---------- AUTH ----------
+        let currentUser = { username: "admin", password: "admin123", photo: "" };
+        
+        function loadUserData() {
+            const storedUser = localStorage.getItem('pos_user');
+            if (storedUser) {
+                const u = JSON.parse(storedUser);
+                currentUser.username = u.username || "admin";
+                currentUser.password = u.password || "admin123";
+                currentUser.photo = u.photo || "";
+            } else {
+                currentUser = { username: "admin", password: "admin123", photo: "" };
+                saveUserData();
+            }
+        }
+        function saveUserData() {
+            localStorage.setItem('pos_user', JSON.stringify({ username: currentUser.username, password: currentUser.password, photo: currentUser.photo }));
+        }
+        function updateProfilePhoto(base64) {
+            currentUser.photo = base64;
+            saveUserData();
+            updateProfileUI();
+        }
+        function updateProfileUI() {
+            const profileImgElem = document.getElementById('profileImg');
+            const modalPreview = document.getElementById('modalProfilePreview');
+            if (currentUser.photo && currentUser.photo.startsWith('data:image')) {
+                profileImgElem.src = currentUser.photo;
+                modalPreview.src = currentUser.photo;
+            } else {
+                const fallback = `https://ui-avatars.com/api/?background=2c6e2f&color=fff&name=${currentUser.username}`;
+                profileImgElem.src = fallback;
+                modalPreview.src = fallback;
+            }
+            document.getElementById('profileName').innerText = currentUser.username;
+        }
+        function changePassword(newPass) {
+            currentUser.password = newPass;
+            saveUserData();
+            alert("Password changed successfully!");
+        }
+        function verifyLogin(username, password) {
+            return (username === currentUser.username && password === currentUser.password);
+        }
+
+        function showLogin() {
+            document.getElementById('loginOverlay').style.display = 'flex';
+            document.getElementById('posContent').style.display = 'none';
+        }
+        function showPOS() {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('posContent').style.display = 'block';
+            loadInitialData();
+            renderPurchasesTable();
+            updateStats();
+            updateProfileUI();
+        }
+        function logout() { showLogin(); }
+
+        // ---------- PURCHASES ----------
+        let purchases = [];
+        let editingId = null;
+        let searchTerm = "";
+        let ceoEmail = "";
+        let ceoWhatsappNumbers = "255713381496";
+
+        const itemNameInput = document.getElementById('itemName');
+        const supplierInput = document.getElementById('supplier');
+        const quantityInput = document.getElementById('quantity');
+        const unitPriceInput = document.getElementById('unitPrice');
+        const purchaseDateInput = document.getElementById('purchaseDate');
+        const submitBtn = document.getElementById('submitBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const formTitleSpan = document.getElementById('formTitle');
+        const liveTotalSpan = document.getElementById('liveTotalPreview');
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const whatsappReportBtn = document.getElementById('whatsappReportBtn');
+        const emailDailyReportBtn = document.getElementById('emailDailyReportBtn');
+        const ceoEmailInput = document.getElementById('ceoEmailInput');
+        const saveCeoEmailBtn = document.getElementById('saveCeoEmailBtn');
+        const ceoWhatsappInput = document.getElementById('ceoWhatsappInput');
+        const saveCeoWhatsappBtn = document.getElementById('saveCeoWhatsappBtn');
+        const totalSpentAmountSpan = document.getElementById('totalSpentAmount');
+        const totalTransactionsSpan = document.getElementById('totalTransactions');
+        const avgPurchaseSpan = document.getElementById('avgPurchase');
+
+        function formatTZS(value) { return 'TZS ' + Math.round(value).toLocaleString('en-US'); }
+        function savePurchasesToLocal() { localStorage.setItem('construction_pos_purchases_tzs', JSON.stringify(purchases)); }
+        function loadInitialData() {
+            const stored = localStorage.getItem('construction_pos_purchases_tzs');
+            if (stored) purchases = JSON.parse(stored);
+            if (!purchases || purchases.length === 0) {
+                purchases = [
+                    { id: 1001, item: "Portland Simiti (Tons)", supplier: "Twiga Cement", quantity: 12, unitPrice: 28500, date: "2025-02-10", total: 342000 },
+                    { id: 1002, item: "Steel Rebar #4 (Pcs)", supplier: "Mabati Rolling Mills", quantity: 450, unitPrice: 6200, date: "2025-02-12", total: 2790000 },
+                    { id: 1003, item: "Timber Mbao 2x4", supplier: "Kilimanjaro Forest", quantity: 800, unitPrice: 4800, date: "2025-02-14", total: 3840000 },
+                    { id: 1004, item: "Concrete Blocks", supplier: "BlockMaster TZ", quantity: 1200, unitPrice: 1850, date: "2025-02-18", total: 2220000 },
+                    { id: 1005, item: "Mabati (Roofing Sheets)", supplier: "Steelplus Ltd", quantity: 320, unitPrice: 18750, date: new Date().toISOString().split('T')[0], total: 6000000 }
+                ];
+                savePurchasesToLocal();
+            }
+            purchases = purchases.map(p => ({ ...p, total: p.quantity * p.unitPrice }));
+            savePurchasesToLocal();
+        }
+        function updateStats() {
+            const totalSpent = purchases.reduce((s,p) => s + p.quantity * p.unitPrice, 0);
+            totalSpentAmountSpan.innerText = formatTZS(totalSpent);
+            totalTransactionsSpan.innerText = purchases.length;
+            const avg = purchases.length ? totalSpent / purchases.length : 0;
+            avgPurchaseSpan.innerText = formatTZS(avg);
+        }
+        function renderPurchasesTable() {
+            let filtered = purchases.filter(p => searchTerm === "" || p.item.toLowerCase().includes(searchTerm) || (p.supplier && p.supplier.toLowerCase().includes(searchTerm)));
+            filtered.sort((a,b)=> new Date(b.date) - new Date(a.date));
+            if(filtered.length === 0){
+                tableBody.innerHTML = `<tr class="empty-row"><td colspan="7">No purchases recorded.</td></tr>`;
+                return;
+            }
+            let html = '';
+            filtered.forEach(p => {
+                html += `
+                    <tr>
+                        <td><strong>${escapeHtml(p.item)}</strong></td>
+                        <td>${escapeHtml(p.supplier||'—')}</td>
+                        <td>${p.quantity}</td>
+                        <td>${formatTZS(p.unitPrice)}</td>
+                        <td class="badge-total">${formatTZS(p.total)}</td>
+                        <td>${formatDate(p.date)}</td>
+                        <td class="action-icons"><i class="fas fa-edit" data-id="${p.id}"></i> <i class="fas fa-trash-alt" data-id="${p.id}"></i></td>
+                    </tr>
+                `;
+            });
+            tableBody.innerHTML = html;
+            document.querySelectorAll('.fa-edit').forEach(icon => icon.addEventListener('click', e => startEditPurchase(parseInt(icon.dataset.id))));
+            document.querySelectorAll('.fa-trash-alt').forEach(icon => icon.addEventListener('click', e => deletePurchaseById(parseInt(icon.dataset.id))));
+        }
+        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+        function formatDate(d) { if(!d) return ''; return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
+        function resetFormToAdd() { editingId=null; formTitleSpan.innerText="Record Purchase"; submitBtn.innerHTML='<i class="fas fa-save"></i> Add Purchase'; cancelEditBtn.style.display='none'; itemNameInput.value=''; supplierInput.value=''; quantityInput.value='1'; unitPriceInput.value=''; purchaseDateInput.value=new Date().toISOString().split('T')[0]; updateLiveTotalPreview(); }
+        function startEditPurchase(id) { let p = purchases.find(x=>x.id===id); if(!p) return; editingId=id; itemNameInput.value=p.item; supplierInput.value=p.supplier||''; quantityInput.value=p.quantity; unitPriceInput.value=p.unitPrice; purchaseDateInput.value=p.date; formTitleSpan.innerText="✏️ Edit Purchase"; submitBtn.innerHTML='<i class="fas fa-pen-alt"></i> Update'; cancelEditBtn.style.display='flex'; updateLiveTotalPreview(); }
+        function updateLiveTotalPreview(){ let q=parseFloat(quantityInput.value)||0, p=parseFloat(unitPriceInput.value)||0; liveTotalSpan.innerHTML=`<i class="fas fa-calculator"></i> Line total: ${formatTZS(q*p)}`; }
+        function submitPurchase(e){ e.preventDefault(); let item=itemNameInput.value.trim(); if(!item) return alert("Item required"); let qty=parseFloat(quantityInput.value); let price=parseFloat(unitPriceInput.value); let date=purchaseDateInput.value; if(isNaN(qty)||qty<=0||isNaN(price)||price<=0||!date) return alert("Valid quantity, price and date");
+            const total=qty*price;
+            if(editingId){ let idx=purchases.findIndex(p=>p.id===editingId); if(idx!==-1) purchases[idx]={...purchases[idx], item:item, supplier:supplierInput.value.trim(), quantity:qty, unitPrice:price, date:date, total:total}; editingId=null; }
+            else purchases.push({id:Date.now(), item:item, supplier:supplierInput.value.trim(), quantity:qty, unitPrice:price, date:date, total:total});
+            savePurchasesToLocal(); resetFormToAdd(); renderPurchasesTable(); updateStats(); }
+        function deletePurchaseById(id){ purchases=purchases.filter(p=>p.id!==id); if(editingId===id) resetFormToAdd(); savePurchasesToLocal(); renderPurchasesTable(); updateStats(); }
+        function deleteAllPurchases(){ if(purchases.length && confirm("Delete ALL purchases?")){ purchases=[]; savePurchasesToLocal(); resetFormToAdd(); renderPurchasesTable(); updateStats(); } }
+        
+        function getWhatsAppReportText() {
+            const totalSpent = purchases.reduce((a,b)=>a+b.total,0);
+            const transactionCount = purchases.length;
+            const sorted = [...purchases].sort((a,b)=> new Date(b.date) - new Date(a.date));
+            const last3 = sorted.slice(0,3);
+            let details = "";
+            if (last3.length > 0) {
+                details = "\n🔹 *Recent purchases:*\n";
+                last3.forEach(p => {
+                    const purchaseDate = new Date(p.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                    details += `• ${p.item} (${p.quantity} x ${formatTZS(p.unitPrice)}) = ${formatTZS(p.total)} - *${purchaseDate}*\n`;
+                });
+            }
+            return `🏗️ *ENESTA PLANTS & EQUIPMENTS* 🏗️\n📊 *Purchase Summary*\n💰 Total: ${formatTZS(totalSpent)}\n📦 Orders: ${transactionCount}\n${details}\n✅ Generated from POS System.`;
+        }
+        
+        function sendWhatsAppReport() {
+            if (!purchases.length) { alert("No purchases to report."); return; }
+            let numbersStr = ceoWhatsappNumbers.trim();
+            if (!numbersStr) { alert("Please save at least one WhatsApp number."); return; }
+            let numbers = numbersStr.split(',').map(n => n.trim()).filter(n => n.length > 0);
+            if (numbers.length === 0) { alert("No valid WhatsApp numbers found."); return; }
+            const reportText = getWhatsAppReportText();
+            const encodedText = encodeURIComponent(reportText);
+            if (numbers.length > 3 && !confirm(`You are about to send the report to ${numbers.length} recipients. This will open ${numbers.length} WhatsApp tabs/pages. Continue?`)) return;
+            for (let rawNumber of numbers) {
+                let cleanNumber = rawNumber.replace(/\D/g, '');
+                if (cleanNumber.length === 0) continue;
+                if (cleanNumber.startsWith('0')) cleanNumber = '255' + cleanNumber.substring(1);
+                if (!cleanNumber.startsWith('255')) cleanNumber = '255' + cleanNumber;
+                window.open(`https://wa.me/${cleanNumber}?text=${encodedText}`, '_blank');
+            }
+            alert(`Report opened for ${numbers.length} recipient(s). If popups are blocked, please allow them.`);
+        }
+        
+        function getTodayPurchases(){ const today=new Date().toISOString().split('T')[0]; return purchases.filter(p=>p.date===today); }
+        function sendEmailDailyReport(){ if(!ceoEmail) return alert("Save CEO email first"); let todayPurchases=getTodayPurchases(); let totalToday = todayPurchases.reduce((s,p)=>s+p.total,0); let body=`Dear CEO,\nDaily purchases: ${todayPurchases.length} items\nTotal: ${formatTZS(totalToday)}\n\nDetails:\n`+todayPurchases.map(p=>`- ${p.item} | ${p.quantity} x ${formatTZS(p.unitPrice)} = ${formatTZS(p.total)} (${formatDate(p.date)})`).join('\n'); window.open(`mailto:${encodeURIComponent(ceoEmail)}?subject=Daily Purchase Report&body=${encodeURIComponent(body)}`,'_blank'); }
+        
+        function loadCeoEmail(){ let stored=localStorage.getItem('ceo_email_address'); if(stored){ ceoEmail=stored; ceoEmailInput.value=stored; } }
+        function saveCeoEmail(){ let email=ceoEmailInput.value.trim(); if(email && !email.includes('@')) return alert("Invalid email"); ceoEmail=email; localStorage.setItem('ceo_email_address',ceoEmail); alert("CEO email saved"); }
+        
+        function loadCeoWhatsapp(){ 
+            let stored = localStorage.getItem('ceo_whatsapp_numbers'); 
+            if(stored){ ceoWhatsappNumbers = stored; ceoWhatsappInput.value = stored; } 
+            else { ceoWhatsappNumbers = "255713381496"; ceoWhatsappInput.value = "255713381496"; localStorage.setItem('ceo_whatsapp_numbers', ceoWhatsappNumbers); }
+        }
+        function saveCeoWhatsapp(){ 
+            let wa = ceoWhatsappInput.value.trim(); 
+            if (!wa) { ceoWhatsappNumbers = ""; localStorage.setItem('ceo_whatsapp_numbers', ""); alert("WhatsApp numbers cleared"); return; }
+            let parts = wa.split(',').map(p => p.trim()).filter(p => p.length > 0);
+            let valid = true;
+            for (let p of parts) {
+                let digits = p.replace(/\D/g, '');
+                if (digits.length < 9 || digits.length > 15) {
+                    alert(`Invalid number: ${p}. Use country code without '+' or spaces. Example: 255713381496`);
+                    valid = false;
+                    break;
+                }
+            }
+            if (!valid) return;
+            ceoWhatsappNumbers = wa;
+            localStorage.setItem('ceo_whatsapp_numbers', wa);
+            alert("WhatsApp numbers saved. Use comma to separate multiple.");
+        }
+
+        const modal = document.getElementById('profileModal');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const profileUpload = document.getElementById('profileUpload');
+        function openModal() { modal.style.display = 'flex'; newPasswordInput.value = ''; confirmPasswordInput.value = ''; }
+        function closeModal() { modal.style.display = 'none'; }
+        profileUpload.addEventListener('change', function(e) { const file = e.target.files[0]; if(file) { const reader = new FileReader(); reader.onload = function(ev) { updateProfilePhoto(ev.target.result); }; reader.readAsDataURL(file); } });
+        saveProfileBtn.addEventListener('click', function() { const newPass = newPasswordInput.value.trim(); if(newPass) { if(newPass !== confirmPasswordInput.value) { alert("Passwords do not match"); return; } if(newPass.length < 4) { alert("Password min 4 chars"); return; } changePassword(newPass); } closeModal(); });
+        closeModalBtn.addEventListener('click', closeModal);
+
+        function bindEvents() {
+            document.getElementById('purchaseForm').addEventListener('submit', submitPurchase);
+            cancelEditBtn.addEventListener('click', resetFormToAdd);
+            quantityInput.addEventListener('input', updateLiveTotalPreview);
+            unitPriceInput.addEventListener('input', updateLiveTotalPreview);
+            searchInput.addEventListener('input', () => { searchTerm = searchInput.value.toLowerCase(); renderPurchasesTable(); });
+            clearSearchBtn.addEventListener('click', () => { searchInput.value = ''; searchTerm = ''; renderPurchasesTable(); });
+            clearAllBtn.addEventListener('click', deleteAllPurchases);
+            whatsappReportBtn.addEventListener('click', sendWhatsAppReport);
+            emailDailyReportBtn.addEventListener('click', sendEmailDailyReport);
+            saveCeoEmailBtn.addEventListener('click', saveCeoEmail);
+            saveCeoWhatsappBtn.addEventListener('click', saveCeoWhatsapp);
+            document.getElementById('changePasswordBtn').addEventListener('click', openModal);
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            document.getElementById('profileImg').addEventListener('click', openModal);
+            document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+        }
+
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            if(verifyLogin(username, password)) {
+                showPOS();
+                bindEvents();
+                loadCeoEmail();
+                loadCeoWhatsapp();
+                loadInitialData();
+                renderPurchasesTable();
+                updateStats();
+                updateProfileUI();
+                document.getElementById('loginError').innerText = '';
+            } else {
+                document.getElementById('loginError').innerText = 'Invalid username or password';
+            }
+        });
+        document.getElementById('loginPassword').addEventListener('keypress', (e) => { if(e.key === 'Enter') document.getElementById('loginBtn').click(); });
+
+        loadUserData();
+        initDarkMode();
+        showLogin();
+    </script>
+</body>
+</html>
