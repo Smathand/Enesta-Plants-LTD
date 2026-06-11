@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Enesta Plants & Equipments - POS | TZS</title>
+    <title>Enesta Plants & Equipments - Center Login POS | TZS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Light mode (default) */
+        /* Light mode & dark mode */
         :root {
             --bg-body: #f0f2f5;
             --text-primary: #1e293b;
@@ -41,9 +41,9 @@
             --info-note: #4b5563;
             --login-gradient-start: #0f2b1d;
             --login-gradient-end: #1a4a2a;
+            --filter-active-bg: #2c6e2f;
+            --filter-active-text: white;
         }
-
-        /* Dark mode - neutral dark (no blue tones) */
         body.dark {
             --bg-body: #0a0a0a;
             --text-primary: #e5e5e5;
@@ -77,385 +77,139 @@
             --info-note: #a0a0a0;
             --login-gradient-start: #0a0a0a;
             --login-gradient-end: #1a1a1a;
+            --filter-active-bg: #4ade80;
+            --filter-active-text: #0a0a0a;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-        }
-        body {
-            background: var(--bg-body);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.2s ease; }
+        body { background: var(--bg-body); font-family: 'Inter', sans-serif; color: var(--text-primary); min-height: 100vh; }
         button, .btn, .btn-sm, .login-btn, .whatsapp-btn, .email-btn, .btn-save-email, .btn-save-wa,
-        .btn-primary, .btn-secondary, .btn-outline, .logout-btn, .change-pw-btn,
-        .inline-btn, #saveProfileBtn, #closeModalBtn, #clearSearchBtn, #clearAllBtn,
-        #cancelEditBtn, #submitBtn, .action-icons i, .profile-pic, .profile-preview {
-            outline: none !important;
-            box-shadow: none !important;
-            border: none !important;
-        }
+        .btn-primary, .btn-secondary, .btn-outline, .logout-btn, .change-pw-btn, .inline-btn,
+        #saveProfileBtn, #closeModalBtn, #clearSearchBtn, #clearAllBtn, #cancelEditBtn, #submitBtn,
+        .action-icons i, .profile-pic, .profile-preview { outline: none !important; box-shadow: none !important; border: none !important; }
         button, .btn, .btn-sm, .login-btn, .whatsapp-btn, .email-btn, .btn-save-email, .btn-save-wa,
-        .btn-primary, .btn-secondary, .btn-outline, .logout-btn, .change-pw-btn,
-        .inline-btn, #saveProfileBtn, #closeModalBtn, #clearSearchBtn, #clearAllBtn,
-        #cancelEditBtn, #submitBtn {
-            border-radius: 12px !important;
-        }
-        .btn-primary, .login-btn, #submitBtn {
-            background: var(--btn-primary-bg);
-            color: white;
-        }
-        .btn-primary:hover, .login-btn:hover, #submitBtn:hover {
-            background: var(--btn-primary-hover);
-        }
-        .btn-secondary, #cancelEditBtn, #closeModalBtn {
-            background: var(--btn-secondary-bg);
-            color: var(--btn-secondary-color);
-        }
-        .btn-outline, #clearAllBtn {
-            background: transparent;
-            color: var(--btn-outline-color);
-            border: 1px solid var(--btn-outline-border) !important;
-        }
-        .whatsapp-btn {
-            background: var(--btn-whatsapp);
-            color: white;
-        }
-        .whatsapp-btn:hover {
-            background: var(--btn-whatsapp-hover);
-        }
-        .email-btn, .btn-save-email {
-            background: var(--btn-email);
-            color: white;
-        }
-        .email-btn:hover, .btn-save-email:hover {
-            background: var(--btn-email-hover);
-        }
-        .btn-save-wa {
-            background: #25D366;
-            color: white;
-        }
-        .btn-save-wa:hover {
-            background: #128C7E;
-        }
-        #clearSearchBtn {
-            background: var(--btn-email);
-            color: white;
-        }
-        #clearSearchBtn:hover {
-            background: var(--btn-email-hover);
-        }
-        .profile-pic, .profile-preview {
-            border: 2px solid #2c6e2f !important;
-            border-radius: 50% !important;
-            object-fit: cover;
-        }
-        /* LARGER INPUTS */
-        input, select, textarea {
-            outline: none !important;
-            box-shadow: none !important;
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            color: var(--text-primary);
-            padding: 14px 18px !important;
-            font-size: 1rem !important;
-            border-radius: 16px;
-            width: 100%;
-            font-family: 'Inter', sans-serif;
-        }
-        input:focus, select:focus {
-            border-color: var(--input-focus);
-        }
-        label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--login-gradient-start) 0%, var(--login-gradient-end) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .login-card {
-            background: var(--card-bg);
-            border-radius: 32px;
-            padding: 32px 28px;
-            width: 90%;
-            max-width: 420px;
-            text-align: center;
-        }
-        .login-card .logo-icon { font-size: 90px; color: #2c6e2f; margin-bottom: 16px; }
-        .login-card h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e4620, #2c6e2f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-        .input-group input {
-            width: 100%;
-            padding: 14px 18px !important;
-            border-radius: 16px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem !important;
-        }
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 8px;
-            font-size: 1rem;
-        }
-        .error-msg { color: #dc2626; font-size: 0.75rem; margin-top: 12px; }
+        .btn-primary, .btn-secondary, .btn-outline, .logout-btn, .change-pw-btn, .inline-btn,
+        #saveProfileBtn, #closeModalBtn, #clearSearchBtn, #clearAllBtn, #cancelEditBtn, #submitBtn { border-radius: 14px !important; }
+        .btn-primary, .login-btn, #submitBtn { background: var(--btn-primary-bg); color: white; }
+        .btn-primary:hover, .login-btn:hover, #submitBtn:hover { background: var(--btn-primary-hover); }
+        .btn-secondary, #cancelEditBtn, #closeModalBtn { background: var(--btn-secondary-bg); color: var(--btn-secondary-color); }
+        .btn-outline, #clearAllBtn { background: transparent; color: var(--btn-outline-color); border: 1px solid var(--btn-outline-border) !important; }
+        .whatsapp-btn { background: var(--btn-whatsapp); color: white; }
+        .whatsapp-btn:hover { background: var(--btn-whatsapp-hover); }
+        .email-btn, .btn-save-email { background: var(--btn-email); color: white; }
+        .email-btn:hover, .btn-save-email:hover { background: var(--btn-email-hover); }
+        .btn-save-wa { background: #25D366; color: white; }
+        .btn-save-wa:hover { background: #128C7E; }
+        #clearSearchBtn { background: var(--btn-email); color: white; }
+        .profile-pic, .profile-preview { border: 2px solid #2c6e2f !important; border-radius: 50% !important; object-fit: cover; }
+        input, select, textarea { outline: none; box-shadow: none; background: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-primary); padding: 14px 18px; font-size: 1rem; border-radius: 16px; width: 100%; font-family: 'Inter', sans-serif; }
+        input:focus, select:focus { border-color: var(--input-focus); transform: scale(1.01); }
+        label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 8px; }
+        .flex-row { display: flex; gap: 12px; align-items: center; }
+        .add-center-btn { width: auto; padding: 10px 18px; background: var(--btn-secondary-bg); color: var(--btn-secondary-color); border-radius: 40px; cursor: pointer; font-weight: 500; font-size: 0.85rem; white-space: nowrap; }
+        .center-filter { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px; padding: 16px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+        .filter-buttons { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .filter-chip-btn { background: transparent; border: 1px solid var(--btn-outline-border) !important; color: var(--btn-outline-color); padding: 6px 14px; font-size: 0.85rem; border-radius: 32px; cursor: pointer; transition: all 0.2s; }
+        .filter-chip-btn.active-filter { background: var(--filter-active-bg); color: var(--filter-active-text); border-color: transparent !important; }
+        .filter-chip-btn:hover:not(.active-filter) { background: var(--btn-secondary-bg); }
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--login-gradient-start), var(--login-gradient-end)); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .login-card { background: var(--card-bg); border-radius: 40px; padding: 40px 32px; width: 90%; max-width: 450px; text-align: center; }
+        .login-card .logo-icon { font-size: 100px; color: #2c6e2f; margin-bottom: 20px; }
+        .login-card h2 { font-size: 2.5rem; font-weight: 700; background: linear-gradient(135deg, #1e4620, #2c6e2f); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .input-group { margin-bottom: 24px; text-align: left; }
+        .input-group input { padding: 14px 18px !important; border-radius: 20px; font-size: 1rem; }
+        .login-btn { width: 100%; padding: 14px; font-weight: 600; margin-top: 8px; }
+        .error-msg { color: #dc2626; font-size: 0.8rem; margin-top: 12px; }
         .pos-content { display: none; padding: 24px 20px; }
         .pos-container { max-width: 1440px; margin: 0 auto; }
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--header-bg);
-            padding: 12px 24px;
-            border-radius: 60px;
-            margin-bottom: 24px;
-            border: 1px solid var(--header-border);
-        }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: var(--header-bg); padding: 12px 24px; border-radius: 60px; margin-bottom: 24px; border: 1px solid var(--header-border); }
         .logo-container { display: flex; align-items: center; gap: 12px; }
         .logo-container i { font-size: 52px; color: #2c6e2f; }
-        .brand-name {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1e4620, #2c6e2f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.3px;
-        }
+        .brand-name { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #1e4620, #2c6e2f); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .profile-area { display: flex; align-items: center; gap: 16px; }
         .profile-pic { width: 44px; height: 44px; cursor: pointer; }
-        .profile-name { font-weight: 600; }
-        .logout-btn, .change-pw-btn, .dark-mode-toggle {
-            background: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            padding: 6px 12px;
-        }
-        .dark-mode-toggle i {
-            font-size: 1.2rem;
-        }
         .stats-row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 32px; }
-        .stat-card {
-            background: var(--stat-card-bg);
-            border-radius: 24px;
-            padding: 18px 24px;
-            flex: 1 1 200px;
-            border: 1px solid var(--stat-border);
-        }
-        .stat-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: #5b6e8c;
-            margin-bottom: 8px;
-        }
-        body.dark .stat-label {
-            color: #a0a0a0;
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #0f2b1d;
-        }
-        body.dark .stat-value {
-            color: #86efac;
-        }
+        .stat-card { background: var(--stat-card-bg); border-radius: 24px; padding: 18px 24px; flex: 1 1 200px; border: 1px solid var(--stat-border); }
+        .stat-label { font-size: 0.85rem; text-transform: uppercase; font-weight: 600; color: #5b6e8c; margin-bottom: 8px; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: #0f2b1d; }
+        body.dark .stat-value { color: #86efac; }
         .pos-layout { display: flex; flex-direction: column; gap: 28px; }
-        @media (min-width: 960px) {
-            .pos-layout { flex-direction: row; align-items: flex-start; }
-            .form-card { flex: 0 0 360px; position: sticky; top: 20px; }
-            .purchases-section { flex: 1; }
-        }
-        .card {
-            background: var(--card-bg);
-            border-radius: 28px;
-            border: 1px solid var(--card-border);
-            overflow: hidden;
-        }
-        .card-header {
-            padding: 18px 24px;
-            border-bottom: 1px solid var(--card-border);
-        }
-        .card-header h2 {
-            font-size: 1.35rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        @media (min-width: 960px) { .pos-layout { flex-direction: row; align-items: flex-start; } .form-card { flex: 0 0 400px; position: sticky; top: 20px; } .purchases-section { flex: 1; } }
+        .card { background: var(--card-bg); border-radius: 28px; border: 1px solid var(--card-border); overflow: hidden; }
+        .card-header { padding: 18px 24px; border-bottom: 1px solid var(--card-border); }
+        .card-header h2 { font-size: 1.35rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
         .card-body { padding: 24px; }
         .form-group { margin-bottom: 22px; }
-        .total-preview {
-            background: var(--ceo-settings-bg);
-            padding: 12px 16px;
-            border-radius: 16px;
-            margin-top: 10px;
-            font-weight: 500;
-            text-align: right;
-            font-size: 0.95rem;
-        }
-        .btn {
-            padding: 14px 18px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            font-size: 0.95rem;
-        }
+        .total-preview { background: var(--ceo-settings-bg); padding: 12px 16px; border-radius: 16px; margin-top: 10px; font-weight: 500; text-align: right; }
+        .btn { padding: 14px 18px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
         .flex-btns { display: flex; gap: 12px; margin-top: 12px; }
         .search-area { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
         .search-input { flex: 1; position: relative; }
-        .search-input i {
-            position: absolute;
-            left: 18px;
-            top: 18px;
-            color: #94a3b8;
-        }
+        .search-input i { position: absolute; left: 18px; top: 18px; color: #94a3b8; }
         .search-input input { padding-left: 48px !important; }
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th, td {
-            padding: 14px 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--table-border);
-        }
-        th {
-            background: var(--table-header-bg);
-            font-weight: 600;
-        }
-        .action-icons i {
-            font-size: 1.1rem;
-            margin: 0 6px;
-            cursor: pointer;
-            color: var(--action-icon);
-        }
+        th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--table-border); vertical-align: middle; }
+        th { background: var(--table-header-bg); font-weight: 600; }
+        td:nth-child(7) { min-width: 140px; word-break: break-word; }
+        .center-badge { background: var(--btn-secondary-bg); padding: 6px 12px; border-radius: 30px; display: inline-block; }
+        .action-icons i { font-size: 1.1rem; margin: 0 6px; cursor: pointer; color: var(--action-icon); }
         .action-icons i.fa-edit:hover { color: var(--action-edit-hover); }
         .action-icons i.fa-trash-alt:hover { color: var(--action-delete-hover); }
         .empty-row td { text-align: center; padding: 40px; color: var(--empty-row-color); }
         .footer-actions { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-        .btn-sm { width: auto; padding: 10px 18px; font-size: 0.85rem; }
-        .ceo-settings {
-            background: var(--ceo-settings-bg);
-            border-radius: 20px;
-            padding: 14px 18px;
-            margin-bottom: 16px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 12px;
-        }
+        .btn-sm { width: auto; padding: 6px 14px; font-size: 0.85rem; border-radius: 32px; }
+        .ceo-settings { background: var(--ceo-settings-bg); border-radius: 20px; padding: 14px 18px; margin-bottom: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+        .label-with-icon { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
         .inline-btn { width: auto; padding: 8px 16px; }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            align-items: center;
-            justify-content: center;
-            z-index: 1100;
-        }
-        .modal-card {
-            background: var(--modal-bg);
-            border-radius: 28px;
-            padding: 28px;
-            width: 90%;
-            max-width: 450px;
-            color: var(--text-primary);
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 1100; }
+        .modal-card { background: var(--modal-bg); border-radius: 28px; padding: 24px; width: 90%; max-width: 550px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; }
         .profile-upload { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 20px; }
         .profile-preview { width: 100px; height: 100px; }
-        .info-note {
-            font-size: 0.75rem;
-            color: var(--info-note);
-            margin-top: 6px;
-            margin-bottom: 10px;
-        }
-        @media (max-width: 640px) {
-            .brand-name { font-size: 1.3rem; }
-            .logo-container i { font-size: 36px; }
-            .login-card .logo-icon { font-size: 70px; }
-            input, select, textarea { padding: 12px 14px !important; font-size: 0.9rem !important; }
-            .btn { padding: 12px 14px; }
-        }
+        .users-scrollable { max-height: 250px; overflow-y: auto; margin-bottom: 16px; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--table-border); }
+        .button-group-center { display: flex; justify-content: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+        .section-heading { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; margin-top: 8px; color: var(--text-primary); }
+        .modal-footer-section { flex-shrink: 0; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+        .user-search-wrapper { position: relative; width: 200px; }
+        .user-search-wrapper i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem; pointer-events: none; }
+        .user-search-input { width: 100%; padding: 6px 12px 6px 32px !important; font-size: 0.85rem !important; border-radius: 20px; }
+        /* Profile modal buttons larger */
+        .profile-modal-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
+        .profile-modal-buttons button { padding: 8px 24px; font-size: 0.9rem; }
+        @media (max-width: 640px) { .brand-name { font-size: 1.2rem; } .logo-container i { font-size: 36px; } .button-group-center { flex-direction: column; align-items: center; } .user-search-wrapper { width: 100%; } }
     </style>
 </head>
 <body>
-    <!-- LOGIN PAGE -->
     <div id="loginOverlay" class="login-overlay">
         <div class="login-card">
             <div class="logo-icon"><i class="fas fa-hard-hat"></i></div>
-            <h2>Enesta Plants and EquipmentsPOS</h2>
-            <p style="margin-bottom: 24px;">Construction Procurement System</p>
-            <div class="input-group">
-                <label><i class="fas fa-user"></i> Username</label>
-                <input type="text" id="loginUsername" placeholder="admin">
-            </div>
-            <div class="input-group">
-                <label><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="loginPassword" placeholder="••••••">
-            </div>
+            <h2>Enesta Plants & Equipments</h2>
+            <p style="margin-bottom: 28px;">Center-based Login System</p>
+            <div class="input-group"><label><i class="fas fa-user"></i> Username</label><input type="text" id="loginUsername" placeholder="admin or center username"></div>
+            <div class="input-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="loginPassword" placeholder="••••••"></div>
             <button id="loginBtn" class="login-btn">Login <i class="fas fa-arrow-right"></i></button>
             <div id="loginError" class="error-msg"></div>
         </div>
     </div>
 
-    <!-- MAIN POS CONTENT -->
     <div id="posContent" class="pos-content">
         <div class="pos-container">
             <div class="top-bar">
-                <div class="logo-container">
-                    <i class="fas fa-hard-hat"></i>
-                    <span class="brand-name">Enesta Plants and EquipmentsPOS</span>
-                </div>
+                <div class="logo-container"><i class="fas fa-hard-hat"></i><span class="brand-name">Enesta Plants & Equipments</span></div>
                 <div class="profile-area">
                     <button id="darkModeToggle" class="dark-mode-toggle"><i class="fas fa-moon"></i></button>
-                    <img id="profileImg" class="profile-pic" src="https://ui-avatars.com/api/?background=2c6e2f&color=fff&name=Admin" alt="profile">
-                    <span class="profile-name" id="profileName">Admin</span>
-                    <button id="changePasswordBtn" class="change-pw-btn"><i class="fas fa-key"></i> Change Password</button>
+                    <img id="profileImg" class="profile-pic" src="https://ui-avatars.com/api/?background=2c6e2f&color=fff&name=User">
+                    <span class="profile-name" id="profileName">User</span>
+                    <button id="changePasswordBtn" class="change-pw-btn"><i class="fas fa-key"></i> Change PW</button>
                     <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
             </div>
 
             <div class="stats-row">
-                <div class="stat-card"><div class="stat-label">TOTAL SPENT (TZS)</div><div class="stat-value" id="totalSpentAmount">TZS 0</div><div class="stat-sub">All-time purchases</div></div>
-                <div class="stat-card"><div class="stat-label">PURCHASES</div><div class="stat-value" id="totalTransactions">0</div><div class="stat-sub">Total orders</div></div>
-                <div class="stat-card"><div class="stat-label">AVG. PURCHASE</div><div class="stat-value" id="avgPurchase">TZS 0</div><div class="stat-sub">Per transaction</div></div>
+                <div class="stat-card"><div class="stat-label">TOTAL SPENT (TZS)</div><div class="stat-value" id="totalSpentAmount">TZS 0</div></div>
+                <div class="stat-card"><div class="stat-label">PURCHASES</div><div class="stat-value" id="totalTransactions">0</div></div>
+                <div class="stat-card"><div class="stat-label">AVG. PURCHASE</div><div class="stat-value" id="avgPurchase">TZS 0</div></div>
             </div>
 
             <div class="pos-layout">
@@ -465,6 +219,10 @@
                         <form id="purchaseForm">
                             <div class="form-group"><label><i class="fas fa-cube"></i> Material / Item *</label><input type="text" id="itemName" placeholder="e.g., Simiti, Rebar" required></div>
                             <div class="form-group"><label><i class="fas fa-building"></i> Supplier</label><input type="text" id="supplier" placeholder="Mwasiti Supplies"></div>
+                            <div class="form-group" id="centerFieldGroup">
+                                <label><i class="fas fa-map-marker-alt"></i> Construction Center</label>
+                                <select id="constructionCenter" required></select>
+                            </div>
                             <div class="form-group"><label><i class="fas fa-weight-hanging"></i> Quantity *</label><input type="number" id="quantity" step="0.01" min="0.01" value="1" required></div>
                             <div class="form-group"><label><i class="fas fa-tag"></i> Unit Price (TZS) *</label><input type="number" id="unitPrice" step="0.01" min="0.01" placeholder="e.g., 28000" required></div>
                             <div class="form-group"><label><i class="fas fa-calendar-alt"></i> Purchase Date *</label><input type="date" id="purchaseDate" required></div>
@@ -472,40 +230,47 @@
                             <button type="submit" id="submitBtn" class="btn btn-primary"><i class="fas fa-save"></i> Add Purchase</button>
                             <div class="flex-btns"><button type="button" id="cancelEditBtn" class="btn btn-secondary" style="display: none;"><i class="fas fa-times"></i> Cancel Edit</button></div>
                         </form>
-                        <hr><div style="font-size: 0.75rem; text-align: center;">Data saved locally • TZS • Delete entry directly</div>
+                        <hr><div style="font-size: 0.75rem; text-align: center;">Data saved locally • Center-based accounts • TZS</div>
                     </div>
                 </div>
 
                 <div class="purchases-section card">
-                    <div class="card-header"><h2><i class="fas fa-clipboard-list"></i> All Company Purchases (TZS)</h2></div>
+                    <div class="card-header"><h2><i class="fas fa-clipboard-list"></i> Purchases</h2></div>
                     <div class="card-body">
+                        <!-- CEO Email Settings with inline icon -->
                         <div class="ceo-settings">
-                            <i class="fas fa-envelope" style="color:#2563eb;"></i>
-                            <label>CEO Email:</label>
+                            <span class="label-with-icon"><i class="fas fa-envelope"></i> CEO Email:</span>
                             <input type="email" id="ceoEmailInput" placeholder="ceo@construction.co.tz">
-                            <button id="saveCeoEmailBtn" class="btn-save-email inline-btn btn-sm">Save Email</button>
+                            <button id="saveCeoEmailBtn" class="btn-save-email inline-btn btn-sm">Save</button>
                         </div>
+                        <!-- WhatsApp Settings with inline icon -->
                         <div class="ceo-settings">
-                            <i class="fab fa-whatsapp" style="color:#25D366;"></i>
-                            <label>WhatsApp Numbers (comma separated):</label>
-                            <input type="text" id="ceoWhatsappInput" placeholder="e.g., 255713381496, 255712345678" value="255713381496">
-                            <button id="saveCeoWhatsappBtn" class="btn-save-wa inline-btn btn-sm">Save Numbers</button>
+                            <span class="label-with-icon"><i class="fab fa-whatsapp"></i> WhatsApp (comma):</span>
+                            <input type="text" id="ceoWhatsappInput" value="255713381496">
+                            <button id="saveCeoWhatsappBtn" class="btn-save-wa inline-btn btn-sm">Save</button>
                         </div>
-                        <div class="info-note"><i class="fas fa-info-circle"></i> Separate multiple numbers with commas. Clicking WhatsApp Report will open a chat for each number (allow popups).</div>
-
+                        <div id="adminOnlyPanel" style="display: none;">
+                            <div class="center-filter">
+                                <i class="fas fa-filter"></i><span style="font-weight:600;">Filter by Center:</span>
+                                <div id="filterButtonsContainer" class="filter-buttons"></div>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <button id="manageUsersBtn" class="email-btn btn-sm"><i class="fas fa-users"></i> Manage Center Accounts</button>
+                            </div>
+                        </div>
                         <div class="search-area">
                             <div class="search-input"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search by material, supplier..."></div>
                             <button id="clearSearchBtn" class="btn-save-email btn-sm">Clear</button>
                         </div>
                         <div class="table-wrapper">
                             <table id="purchasesTable">
-                                <thead><tr><th>Item</th><th>Supplier</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Date</th><th>Actions</th></tr></thead>
-                                <tbody id="tableBody"><tr class="empty-row"><td colspan="7">No purchases recorded.</td></tr></tbody>
+                                <thead><tr><th>Item</th><th>Supplier</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Date</th><th>Center</th><th>Actions</th></tr></thead>
+                                <tbody id="tableBody"><tr class="empty-row"><td colspan="8">No purchases recorded. Add your first purchase.2</tbody>
                             </table>
                         </div>
                         <div class="footer-actions">
                             <div style="display: flex; gap: 8px;">
-                                <button id="whatsappReportBtn" class="btn-sm whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp Report to All</button>
+                                <button id="whatsappReportBtn" class="btn-sm whatsapp-btn"><i class="fab fa-whatsapp"></i> WhatsApp Report</button>
                                 <button id="emailDailyReportBtn" class="btn-sm email-btn"><i class="fas fa-envelope"></i> Email Daily Report</button>
                             </div>
                             <button id="clearAllBtn" class="btn-outline btn-sm"><i class="fas fa-trash-alt"></i> Delete All</button>
@@ -516,280 +281,265 @@
         </div>
     </div>
 
-    <!-- MODAL: Change Password & Profile Photo -->
+    <!-- Profile Modal with larger buttons -->
     <div id="profileModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-user-cog"></i> Profile Settings</h3>
-            <div class="profile-upload">
-                <img id="modalProfilePreview" class="profile-preview" src="https://ui-avatars.com/api/?background=2c6e2f&color=fff&name=Admin">
-                <label class="btn-outline btn-sm" style="cursor:pointer;"><i class="fas fa-upload"></i> Change Photo <input type="file" id="profileUpload" accept="image/*" style="display:none;"></label>
+            <div class="profile-upload"><img id="modalProfilePreview" class="profile-preview"><label class="btn-outline btn-sm" style="cursor:pointer;">Change Photo <input type="file" id="profileUpload" accept="image/*" style="display:none;"></label></div>
+            <div class="input-group"><label>New Password</label><input type="password" id="newPassword" placeholder="Min 4 characters"></div>
+            <div class="input-group"><label>Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm"></div>
+            <div class="profile-modal-buttons">
+                <button id="saveProfileBtn" class="btn-sm btn-primary">Save</button>
+                <button id="closeModalBtn" class="btn-sm btn-secondary">Cancel</button>
             </div>
-            <div class="input-group"><label>New Password</label><input type="password" id="newPassword" placeholder="Enter new password"></div>
-            <div class="input-group"><label>Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm new password"></div>
-            <div style="display: flex; gap: 12px; margin-top: 20px;">
-                <button id="saveProfileBtn" class="btn-primary" style="width:auto; padding: 8px 20px;">Save Changes</button>
-                <button id="closeModalBtn" class="btn-secondary" style="width:auto;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Manage Users Modal (Admin only) with search bar -->
+    <div id="usersModal" class="modal">
+        <div class="modal-card">
+            <div class="flex-between">
+                <h3><i class="fas fa-users"></i> Center User Accounts</h3>
+                <div class="user-search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="userSearchInput" placeholder="Search users..." class="user-search-input">
+                </div>
+            </div>
+            <div class="users-scrollable" id="usersListContainer">
+                <div id="usersList"></div>
+            </div>
+            <div class="modal-footer-section">
+                <div style="margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--table-border);">
+                    <h4 class="section-heading">Add New Center User</h4>
+                    <div class="input-group"><label>Username</label><input type="text" id="newUsername" placeholder="e.g., arusha_center"></div>
+                    <div class="input-group"><label>Password</label><input type="password" id="newUserPassword" placeholder="Password (min 4 chars)"></div>
+                    <div class="input-group"><label>Associated Center Name</label><input type="text" id="newUserCenter" placeholder="Exact center name (will be created if not exists)"></div>
+                    <div class="button-group-center">
+                        <button id="addUserBtn" class="btn-sm btn-primary"><i class="fas fa-plus-circle"></i> Create Center Account</button>
+                    </div>
+                </div>
+                <div class="button-group-center">
+                    <button id="closeUsersModalBtn" class="btn-sm btn-secondary"><i class="fas fa-times"></i> Close</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ---------- DARK MODE ----------
-        function initDarkMode() {
-            const darkMode = localStorage.getItem('darkMode') === 'true';
-            if (darkMode) {
-                document.body.classList.add('dark');
-                const toggleIcon = document.querySelector('#darkModeToggle i');
-                if (toggleIcon) toggleIcon.className = 'fas fa-sun';
-            } else {
-                document.body.classList.remove('dark');
-                const toggleIcon = document.querySelector('#darkModeToggle i');
-                if (toggleIcon) toggleIcon.className = 'fas fa-moon';
-            }
-        }
-        function toggleDarkMode() {
-            const isDark = document.body.classList.toggle('dark');
-            localStorage.setItem('darkMode', isDark);
-            const toggleIcon = document.querySelector('#darkModeToggle i');
-            if (toggleIcon) {
-                toggleIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-            }
-        }
-
-        // ---------- AUTH ----------
-        let currentUser = { username: "admin", password: "admin123", photo: "" };
-        
-        function loadUserData() {
-            const storedUser = localStorage.getItem('pos_user');
-            if (storedUser) {
-                const u = JSON.parse(storedUser);
-                currentUser.username = u.username || "admin";
-                currentUser.password = u.password || "admin123";
-                currentUser.photo = u.photo || "";
-            } else {
-                currentUser = { username: "admin", password: "admin123", photo: "" };
-                saveUserData();
-            }
-        }
-        function saveUserData() {
-            localStorage.setItem('pos_user', JSON.stringify({ username: currentUser.username, password: currentUser.password, photo: currentUser.photo }));
-        }
-        function updateProfilePhoto(base64) {
-            currentUser.photo = base64;
-            saveUserData();
-            updateProfileUI();
-        }
-        function updateProfileUI() {
-            const profileImgElem = document.getElementById('profileImg');
-            const modalPreview = document.getElementById('modalProfilePreview');
-            if (currentUser.photo && currentUser.photo.startsWith('data:image')) {
-                profileImgElem.src = currentUser.photo;
-                modalPreview.src = currentUser.photo;
-            } else {
-                const fallback = `https://ui-avatars.com/api/?background=2c6e2f&color=fff&name=${currentUser.username}`;
-                profileImgElem.src = fallback;
-                modalPreview.src = fallback;
-            }
-            document.getElementById('profileName').innerText = currentUser.username;
-        }
-        function changePassword(newPass) {
-            currentUser.password = newPass;
-            saveUserData();
-            alert("Password changed successfully!");
-        }
-        function verifyLogin(username, password) {
-            return (username === currentUser.username && password === currentUser.password);
-        }
-
-        function showLogin() {
-            document.getElementById('loginOverlay').style.display = 'flex';
-            document.getElementById('posContent').style.display = 'none';
-        }
-        function showPOS() {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('posContent').style.display = 'block';
-            loadInitialData();
-            renderPurchasesTable();
-            updateStats();
-            updateProfileUI();
-        }
-        function logout() { showLogin(); }
-
-        // ---------- PURCHASES ----------
+        // ----- Users & Auth -----
+        let currentUser = null;
         let purchases = [];
         let editingId = null;
         let searchTerm = "";
-        let ceoEmail = "";
-        let ceoWhatsappNumbers = "255713381496";
+        let currentCenterFilter = "all";
+        let ceoEmail = "", ceoWhatsappNumbers = "255713381496";
+        let userSearchTerm = "";
 
-        const itemNameInput = document.getElementById('itemName');
-        const supplierInput = document.getElementById('supplier');
-        const quantityInput = document.getElementById('quantity');
-        const unitPriceInput = document.getElementById('unitPrice');
-        const purchaseDateInput = document.getElementById('purchaseDate');
-        const submitBtn = document.getElementById('submitBtn');
-        const cancelEditBtn = document.getElementById('cancelEditBtn');
-        const formTitleSpan = document.getElementById('formTitle');
-        const liveTotalSpan = document.getElementById('liveTotalPreview');
-        const tableBody = document.getElementById('tableBody');
-        const searchInput = document.getElementById('searchInput');
-        const clearSearchBtn = document.getElementById('clearSearchBtn');
-        const clearAllBtn = document.getElementById('clearAllBtn');
-        const whatsappReportBtn = document.getElementById('whatsappReportBtn');
-        const emailDailyReportBtn = document.getElementById('emailDailyReportBtn');
-        const ceoEmailInput = document.getElementById('ceoEmailInput');
-        const saveCeoEmailBtn = document.getElementById('saveCeoEmailBtn');
-        const ceoWhatsappInput = document.getElementById('ceoWhatsappInput');
-        const saveCeoWhatsappBtn = document.getElementById('saveCeoWhatsappBtn');
-        const totalSpentAmountSpan = document.getElementById('totalSpentAmount');
-        const totalTransactionsSpan = document.getElementById('totalTransactions');
-        const avgPurchaseSpan = document.getElementById('avgPurchase');
+        function initDefaultUsers() {
+            let users = localStorage.getItem('pos_users');
+            if (!users) {
+                users = [
+                    { username: "admin", password: "admin123", role: "admin", center: null, photo: "" },
+                    { username: "arusha", password: "arusha123", role: "center", center: "Main Site - Arusha", photo: "" },
+                    { username: "downtown", password: "downtown123", role: "center", center: "Downtown Tower", photo: "" },
+                    { username: "kigamboni", password: "kiga123", role: "center", center: "Kigamboni Bridge", photo: "" }
+                ];
+                localStorage.setItem('pos_users', JSON.stringify(users));
+            }
+        }
+        function saveUsers(users) { localStorage.setItem('pos_users', JSON.stringify(users)); }
+        function getUsers() { return JSON.parse(localStorage.getItem('pos_users')) || []; }
+        function validateLogin(username, password) {
+            const users = getUsers();
+            const user = users.find(u => u.username === username && u.password === password);
+            return user ? { ...user } : null;
+        }
+        function updateUserPassword(username, newPass) {
+            let users = getUsers();
+            const idx = users.findIndex(u => u.username === username);
+            if (idx !== -1) { users[idx].password = newPass; saveUsers(users); }
+        }
+        function updateUserPhoto(username, photoBase64) {
+            let users = getUsers();
+            const idx = users.findIndex(u => u.username === username);
+            if (idx !== -1) { users[idx].photo = photoBase64; saveUsers(users); }
+        }
+        function addUserAccount(username, password, centerName) {
+            let users = getUsers();
+            if (users.find(u => u.username === username)) return false;
+            users.push({ username, password, role: "center", center: centerName, photo: "" });
+            saveUsers(users);
+            return true;
+        }
+        function deleteUserAccount(username) { if (username === 'admin') return false; let users = getUsers().filter(u => u.username !== username); saveUsers(users); return true; }
 
-        function formatTZS(value) { return 'TZS ' + Math.round(value).toLocaleString('en-US'); }
-        function savePurchasesToLocal() { localStorage.setItem('construction_pos_purchases_tzs', JSON.stringify(purchases)); }
-        function loadInitialData() {
-            const stored = localStorage.getItem('construction_pos_purchases_tzs');
+        // Purchases CRUD
+        function savePurchases() { localStorage.setItem('construction_pos_center_purchases', JSON.stringify(purchases)); }
+        function loadPurchases() {
+            const stored = localStorage.getItem('construction_pos_center_purchases');
             if (stored) purchases = JSON.parse(stored);
             if (!purchases || purchases.length === 0) {
                 purchases = [
-                    { id: 1001, item: "Portland Simiti (Tons)", supplier: "Twiga Cement", quantity: 12, unitPrice: 28500, date: "2025-02-10", total: 342000 },
-                    { id: 1002, item: "Steel Rebar #4 (Pcs)", supplier: "Mabati Rolling Mills", quantity: 450, unitPrice: 6200, date: "2025-02-12", total: 2790000 },
-                    { id: 1003, item: "Timber Mbao 2x4", supplier: "Kilimanjaro Forest", quantity: 800, unitPrice: 4800, date: "2025-02-14", total: 3840000 },
-                    { id: 1004, item: "Concrete Blocks", supplier: "BlockMaster TZ", quantity: 1200, unitPrice: 1850, date: "2025-02-18", total: 2220000 },
-                    { id: 1005, item: "Mabati (Roofing Sheets)", supplier: "Steelplus Ltd", quantity: 320, unitPrice: 18750, date: new Date().toISOString().split('T')[0], total: 6000000 }
+                    { id: 1001, item: "Portland Simiti (Tons)", supplier: "Twiga Cement", quantity: 12, unitPrice: 28500, date: "2025-02-10", total: 342000, center: "Main Site - Arusha" },
+                    { id: 1002, item: "Steel Rebar #4 (Pcs)", supplier: "Mabati Rolling Mills", quantity: 450, unitPrice: 6200, date: "2025-02-12", total: 2790000, center: "Downtown Tower" },
+                    { id: 1003, item: "Timber Mbao 2x4", supplier: "Kilimanjaro Forest", quantity: 800, unitPrice: 4800, date: "2025-02-14", total: 3840000, center: "Main Site - Arusha" },
+                    { id: 1004, item: "Concrete Blocks", supplier: "BlockMaster TZ", quantity: 1200, unitPrice: 1850, date: "2025-02-18", total: 2220000, center: "Kigamboni Bridge" },
+                    { id: 1005, item: "Mabati (Roofing Sheets)", supplier: "Steelplus Ltd", quantity: 320, unitPrice: 18750, date: new Date().toISOString().split('T')[0], total: 6000000, center: "Downtown Tower" }
                 ];
-                savePurchasesToLocal();
+                savePurchases();
             }
             purchases = purchases.map(p => ({ ...p, total: p.quantity * p.unitPrice }));
-            savePurchasesToLocal();
         }
-        function updateStats() {
-            const totalSpent = purchases.reduce((s,p) => s + p.quantity * p.unitPrice, 0);
-            totalSpentAmountSpan.innerText = formatTZS(totalSpent);
-            totalTransactionsSpan.innerText = purchases.length;
-            const avg = purchases.length ? totalSpent / purchases.length : 0;
-            avgPurchaseSpan.innerText = formatTZS(avg);
+
+        function getDistinctCenters() {
+            const centersFromPurchases = new Set(purchases.map(p => p.center).filter(c => c && c.trim() !== ""));
+            const users = getUsers();
+            const centersFromUsers = new Set(users.filter(u => u.role === 'center' && u.center && u.center.trim() !== "").map(u => u.center));
+            const allCenters = new Set([...centersFromPurchases, ...centersFromUsers]);
+            return Array.from(allCenters).sort();
         }
-        function renderPurchasesTable() {
+        
+        function getFilteredPurchases() {
             let filtered = purchases.filter(p => searchTerm === "" || p.item.toLowerCase().includes(searchTerm) || (p.supplier && p.supplier.toLowerCase().includes(searchTerm)));
-            filtered.sort((a,b)=> new Date(b.date) - new Date(a.date));
-            if(filtered.length === 0){
-                tableBody.innerHTML = `<tr class="empty-row"><td colspan="7">No purchases recorded.</td></tr>`;
-                return;
-            }
+            if (currentUser.role === "center") filtered = filtered.filter(p => p.center === currentUser.center);
+            else if (currentCenterFilter !== 'all') filtered = filtered.filter(p => p.center === currentCenterFilter);
+            return filtered.sort((a,b)=> new Date(b.date) - new Date(a.date));
+        }
+
+        function formatTZS(v) { return 'TZS ' + Math.round(v).toLocaleString('en-US'); }
+        function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+        function formatDate(d) { return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
+        function updateStats() { let f = getFilteredPurchases(); let total = f.reduce((s,p)=>s+p.total,0); document.getElementById('totalSpentAmount').innerHTML = formatTZS(total); document.getElementById('totalTransactions').innerText = f.length; let avg = f.length ? total/f.length : 0; document.getElementById('avgPurchase').innerHTML = formatTZS(avg); }
+        
+        function renderPurchasesTable() {
+            let filtered = getFilteredPurchases();
+            if(filtered.length === 0) { tableBody.innerHTML = `<tr class="empty-row"><td colspan="8">No purchases. Add your first purchase.2`; updateStats(); return; }
             let html = '';
-            filtered.forEach(p => {
-                html += `
-                    <tr>
-                        <td><strong>${escapeHtml(p.item)}</strong></td>
-                        <td>${escapeHtml(p.supplier||'—')}</td>
-                        <td>${p.quantity}</td>
-                        <td>${formatTZS(p.unitPrice)}</td>
-                        <td class="badge-total">${formatTZS(p.total)}</td>
-                        <td>${formatDate(p.date)}</td>
-                        <td class="action-icons"><i class="fas fa-edit" data-id="${p.id}"></i> <i class="fas fa-trash-alt" data-id="${p.id}"></i></td>
-                    </tr>
-                `;
-            });
+            filtered.forEach(p => { html += `<tr>
+                    <td><strong>${escapeHtml(p.item)}</strong></td>
+                    <td>${escapeHtml(p.supplier||'—')}</td>
+                    <td>${p.quantity}</td>
+                    <td>${formatTZS(p.unitPrice)}</td>
+                    <td>${formatTZS(p.total)}</td>
+                    <td>${formatDate(p.date)}</td>
+                    <td><span class="center-badge">${escapeHtml(p.center)}</span></td>
+                    <td class="action-icons"><i class="fas fa-edit" data-id="${p.id}"></i> <i class="fas fa-trash-alt" data-id="${p.id}"></i></td>
+                </tr>`; });
             tableBody.innerHTML = html;
             document.querySelectorAll('.fa-edit').forEach(icon => icon.addEventListener('click', e => startEditPurchase(parseInt(icon.dataset.id))));
             document.querySelectorAll('.fa-trash-alt').forEach(icon => icon.addEventListener('click', e => deletePurchaseById(parseInt(icon.dataset.id))));
-        }
-        function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
-        function formatDate(d) { if(!d) return ''; return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
-        function resetFormToAdd() { editingId=null; formTitleSpan.innerText="Record Purchase"; submitBtn.innerHTML='<i class="fas fa-save"></i> Add Purchase'; cancelEditBtn.style.display='none'; itemNameInput.value=''; supplierInput.value=''; quantityInput.value='1'; unitPriceInput.value=''; purchaseDateInput.value=new Date().toISOString().split('T')[0]; updateLiveTotalPreview(); }
-        function startEditPurchase(id) { let p = purchases.find(x=>x.id===id); if(!p) return; editingId=id; itemNameInput.value=p.item; supplierInput.value=p.supplier||''; quantityInput.value=p.quantity; unitPriceInput.value=p.unitPrice; purchaseDateInput.value=p.date; formTitleSpan.innerText="✏️ Edit Purchase"; submitBtn.innerHTML='<i class="fas fa-pen-alt"></i> Update'; cancelEditBtn.style.display='flex'; updateLiveTotalPreview(); }
-        function updateLiveTotalPreview(){ let q=parseFloat(quantityInput.value)||0, p=parseFloat(unitPriceInput.value)||0; liveTotalSpan.innerHTML=`<i class="fas fa-calculator"></i> Line total: ${formatTZS(q*p)}`; }
-        function submitPurchase(e){ e.preventDefault(); let item=itemNameInput.value.trim(); if(!item) return alert("Item required"); let qty=parseFloat(quantityInput.value); let price=parseFloat(unitPriceInput.value); let date=purchaseDateInput.value; if(isNaN(qty)||qty<=0||isNaN(price)||price<=0||!date) return alert("Valid quantity, price and date");
-            const total=qty*price;
-            if(editingId){ let idx=purchases.findIndex(p=>p.id===editingId); if(idx!==-1) purchases[idx]={...purchases[idx], item:item, supplier:supplierInput.value.trim(), quantity:qty, unitPrice:price, date:date, total:total}; editingId=null; }
-            else purchases.push({id:Date.now(), item:item, supplier:supplierInput.value.trim(), quantity:qty, unitPrice:price, date:date, total:total});
-            savePurchasesToLocal(); resetFormToAdd(); renderPurchasesTable(); updateStats(); }
-        function deletePurchaseById(id){ purchases=purchases.filter(p=>p.id!==id); if(editingId===id) resetFormToAdd(); savePurchasesToLocal(); renderPurchasesTable(); updateStats(); }
-        function deleteAllPurchases(){ if(purchases.length && confirm("Delete ALL purchases?")){ purchases=[]; savePurchasesToLocal(); resetFormToAdd(); renderPurchasesTable(); updateStats(); } }
-        
-        function getWhatsAppReportText() {
-            const totalSpent = purchases.reduce((a,b)=>a+b.total,0);
-            const transactionCount = purchases.length;
-            const sorted = [...purchases].sort((a,b)=> new Date(b.date) - new Date(a.date));
-            const last3 = sorted.slice(0,3);
-            let details = "";
-            if (last3.length > 0) {
-                details = "\n🔹 *Recent purchases:*\n";
-                last3.forEach(p => {
-                    const purchaseDate = new Date(p.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-                    details += `• ${p.item} (${p.quantity} x ${formatTZS(p.unitPrice)}) = ${formatTZS(p.total)} - *${purchaseDate}*\n`;
-                });
-            }
-            return `🏗️ *ENESTA PLANTS & EQUIPMENTS* 🏗️\n📊 *Purchase Summary*\n💰 Total: ${formatTZS(totalSpent)}\n📦 Orders: ${transactionCount}\n${details}\n✅ Generated from POS System.`;
-        }
-        
-        function sendWhatsAppReport() {
-            if (!purchases.length) { alert("No purchases to report."); return; }
-            let numbersStr = ceoWhatsappNumbers.trim();
-            if (!numbersStr) { alert("Please save at least one WhatsApp number."); return; }
-            let numbers = numbersStr.split(',').map(n => n.trim()).filter(n => n.length > 0);
-            if (numbers.length === 0) { alert("No valid WhatsApp numbers found."); return; }
-            const reportText = getWhatsAppReportText();
-            const encodedText = encodeURIComponent(reportText);
-            if (numbers.length > 3 && !confirm(`You are about to send the report to ${numbers.length} recipients. This will open ${numbers.length} WhatsApp tabs/pages. Continue?`)) return;
-            for (let rawNumber of numbers) {
-                let cleanNumber = rawNumber.replace(/\D/g, '');
-                if (cleanNumber.length === 0) continue;
-                if (cleanNumber.startsWith('0')) cleanNumber = '255' + cleanNumber.substring(1);
-                if (!cleanNumber.startsWith('255')) cleanNumber = '255' + cleanNumber;
-                window.open(`https://wa.me/${cleanNumber}?text=${encodedText}`, '_blank');
-            }
-            alert(`Report opened for ${numbers.length} recipient(s). If popups are blocked, please allow them.`);
-        }
-        
-        function getTodayPurchases(){ const today=new Date().toISOString().split('T')[0]; return purchases.filter(p=>p.date===today); }
-        function sendEmailDailyReport(){ if(!ceoEmail) return alert("Save CEO email first"); let todayPurchases=getTodayPurchases(); let totalToday = todayPurchases.reduce((s,p)=>s+p.total,0); let body=`Dear CEO,\nDaily purchases: ${todayPurchases.length} items\nTotal: ${formatTZS(totalToday)}\n\nDetails:\n`+todayPurchases.map(p=>`- ${p.item} | ${p.quantity} x ${formatTZS(p.unitPrice)} = ${formatTZS(p.total)} (${formatDate(p.date)})`).join('\n'); window.open(`mailto:${encodeURIComponent(ceoEmail)}?subject=Daily Purchase Report&body=${encodeURIComponent(body)}`,'_blank'); }
-        
-        function loadCeoEmail(){ let stored=localStorage.getItem('ceo_email_address'); if(stored){ ceoEmail=stored; ceoEmailInput.value=stored; } }
-        function saveCeoEmail(){ let email=ceoEmailInput.value.trim(); if(email && !email.includes('@')) return alert("Invalid email"); ceoEmail=email; localStorage.setItem('ceo_email_address',ceoEmail); alert("CEO email saved"); }
-        
-        function loadCeoWhatsapp(){ 
-            let stored = localStorage.getItem('ceo_whatsapp_numbers'); 
-            if(stored){ ceoWhatsappNumbers = stored; ceoWhatsappInput.value = stored; } 
-            else { ceoWhatsappNumbers = "255713381496"; ceoWhatsappInput.value = "255713381496"; localStorage.setItem('ceo_whatsapp_numbers', ceoWhatsappNumbers); }
-        }
-        function saveCeoWhatsapp(){ 
-            let wa = ceoWhatsappInput.value.trim(); 
-            if (!wa) { ceoWhatsappNumbers = ""; localStorage.setItem('ceo_whatsapp_numbers', ""); alert("WhatsApp numbers cleared"); return; }
-            let parts = wa.split(',').map(p => p.trim()).filter(p => p.length > 0);
-            let valid = true;
-            for (let p of parts) {
-                let digits = p.replace(/\D/g, '');
-                if (digits.length < 9 || digits.length > 15) {
-                    alert(`Invalid number: ${p}. Use country code without '+' or spaces. Example: 255713381496`);
-                    valid = false;
-                    break;
-                }
-            }
-            if (!valid) return;
-            ceoWhatsappNumbers = wa;
-            localStorage.setItem('ceo_whatsapp_numbers', wa);
-            alert("WhatsApp numbers saved. Use comma to separate multiple.");
+            updateStats();
         }
 
-        const modal = document.getElementById('profileModal');
-        const newPasswordInput = document.getElementById('newPassword');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const saveProfileBtn = document.getElementById('saveProfileBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const profileUpload = document.getElementById('profileUpload');
-        function openModal() { modal.style.display = 'flex'; newPasswordInput.value = ''; confirmPasswordInput.value = ''; }
-        function closeModal() { modal.style.display = 'none'; }
-        profileUpload.addEventListener('change', function(e) { const file = e.target.files[0]; if(file) { const reader = new FileReader(); reader.onload = function(ev) { updateProfilePhoto(ev.target.result); }; reader.readAsDataURL(file); } });
-        saveProfileBtn.addEventListener('click', function() { const newPass = newPasswordInput.value.trim(); if(newPass) { if(newPass !== confirmPasswordInput.value) { alert("Passwords do not match"); return; } if(newPass.length < 4) { alert("Password min 4 chars"); return; } changePassword(newPass); } closeModal(); });
-        closeModalBtn.addEventListener('click', closeModal);
+        function renderFilterButtons() {
+            const centers = getDistinctCenters();
+            const container = document.getElementById('filterButtonsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            const allBtn = document.createElement('button');
+            allBtn.className = `filter-chip-btn ${currentCenterFilter === 'all' ? 'active-filter' : ''}`;
+            allBtn.innerText = '🏗️ All Centers';
+            allBtn.addEventListener('click', () => { currentCenterFilter = 'all'; renderFilterButtons(); renderPurchasesTable(); });
+            container.appendChild(allBtn);
+            centers.forEach(center => {
+                const btn = document.createElement('button');
+                btn.className = `filter-chip-btn ${currentCenterFilter === center ? 'active-filter' : ''}`;
+                btn.innerText = center;
+                btn.addEventListener('click', () => { currentCenterFilter = center; renderFilterButtons(); renderPurchasesTable(); });
+                container.appendChild(btn);
+            });
+        }
+
+        function populateCenterSelects() {
+            let centers = getDistinctCenters();
+            let centerSelect = document.getElementById('constructionCenter');
+            centerSelect.innerHTML = '';
+            if(currentUser.role === 'center') {
+                document.getElementById('centerFieldGroup').style.display = 'none';
+                centerSelect.innerHTML = `<option value="${currentUser.center}">${currentUser.center}</option>`;
+            } else {
+                document.getElementById('centerFieldGroup').style.display = 'block';
+                if(centers.length === 0) centerSelect.innerHTML = '<option value="">-- No centers --</option>';
+                else centers.forEach(c => { let opt = document.createElement('option'); opt.value = c; opt.textContent = c; centerSelect.appendChild(opt); });
+            }
+            renderFilterButtons();
+        }
+        function resetFormToAdd() { editingId=null; document.getElementById('formTitle').innerText="Record Purchase"; submitBtn.innerHTML='<i class="fas fa-save"></i> Add Purchase'; cancelEditBtn.style.display='none'; document.getElementById('itemName').value=''; document.getElementById('supplier').value=''; document.getElementById('quantity').value='1'; document.getElementById('unitPrice').value=''; document.getElementById('purchaseDate').value=new Date().toISOString().split('T')[0]; updateLiveTotalPreview(); if(currentUser.role !== 'center') { let sel = document.getElementById('constructionCenter'); if(sel.options.length) sel.value = sel.options[0].value; } }
+        function updateLiveTotalPreview(){ let q=parseFloat(document.getElementById('quantity').value)||0, p=parseFloat(document.getElementById('unitPrice').value)||0; document.getElementById('liveTotalPreview').innerHTML=`<i class="fas fa-calculator"></i> Line total: ${formatTZS(q*p)}`; }
+        function startEditPurchase(id) { let p = purchases.find(x=>x.id===id); if(!p) return; editingId=id; document.getElementById('itemName').value=p.item; document.getElementById('supplier').value=p.supplier||''; document.getElementById('quantity').value=p.quantity; document.getElementById('unitPrice').value=p.unitPrice; document.getElementById('purchaseDate').value=p.date; if(currentUser.role === 'admin') document.getElementById('constructionCenter').value = p.center; document.getElementById('formTitle').innerText="✏️ Edit Purchase"; submitBtn.innerHTML='<i class="fas fa-pen-alt"></i> Update'; cancelEditBtn.style.display='flex'; updateLiveTotalPreview(); }
+        function submitPurchase(e){ e.preventDefault(); let item=document.getElementById('itemName').value.trim(); let center = (currentUser.role === 'center') ? currentUser.center : document.getElementById('constructionCenter').value; if(!item) return alert("Item required"); if(!center) return alert("Select center"); let qty=parseFloat(document.getElementById('quantity').value); let price=parseFloat(document.getElementById('unitPrice').value); let date=document.getElementById('purchaseDate').value; if(isNaN(qty)||qty<=0||isNaN(price)||price<=0||!date) return alert("Valid quantity, price, date");
+            const total=qty*price;
+            if(editingId){ let idx=purchases.findIndex(p=>p.id===editingId); if(idx!==-1) purchases[idx]={...purchases[idx], item, supplier:document.getElementById('supplier').value.trim(), quantity:qty, unitPrice:price, date, total, center}; editingId=null; }
+            else purchases.push({id:Date.now(), item, supplier:document.getElementById('supplier').value.trim(), quantity:qty, unitPrice:price, date, total, center});
+            savePurchases(); resetFormToAdd(); populateCenterSelects(); renderPurchasesTable(); }
+        function deletePurchaseById(id){ purchases=purchases.filter(p=>p.id!==id); if(editingId===id) resetFormToAdd(); savePurchases(); renderPurchasesTable(); }
+        function deleteAllPurchases(){ if(purchases.length && confirm("Delete ALL purchases?")){ purchases=[]; savePurchases(); renderPurchasesTable(); } }
+
+        // Reporting with bold numbers
+        function getWhatsAppReportText() {
+            let filtered = getFilteredPurchases();
+            let total = filtered.reduce((s,p)=>s+p.total,0);
+            let transactionCount = filtered.length;
+            let last5 = filtered.slice(0,5);
+            let details = last5.length ? "\n🔹 *Recent purchases:*\n" : "";
+            last5.forEach(p=>details+=`• ${p.item} | ${p.quantity} x ${formatTZS(p.unitPrice)} = ${formatTZS(p.total)} | Center: ${p.center} | ${formatDate(p.date)}\n`);
+            return `🏗️ *ENESTA REPORT* 🏗️\n${currentUser.role==='admin'?`Filter: ${currentCenterFilter!=='all'?currentCenterFilter:"All Centers"}`:`Center: ${currentUser.center}`}\n💰 *Total:* ${formatTZS(total)}\n📦 *Orders:* ${transactionCount}\n${details}`;
+        }
+        function sendWhatsAppReport() { if(!purchases.length) return alert("No purchases"); let nums = ceoWhatsappNumbers.split(',').map(n=>n.trim()).filter(n=>n); if(!nums.length) return alert("Save WhatsApp numbers"); let txt = encodeURIComponent(getWhatsAppReportText()); nums.forEach(n=>{ let clean=n.replace(/\D/g,''); if(clean.startsWith('0')) clean='255'+clean.substring(1); if(!clean.startsWith('255')) clean='255'+clean; window.open(`https://wa.me/${clean}?text=${txt}`,'_blank'); }); alert(`Opened for ${nums.length} recipient(s)`); }
+        function sendEmailDailyReport() { if(!ceoEmail) return alert("Save CEO email"); let today = new Date().toISOString().split('T')[0]; let todayPurchases = getFilteredPurchases().filter(p=>p.date===today); let totalToday = todayPurchases.reduce((s,p)=>s+p.total,0); let body = `Dear CEO,\nDaily purchases (${currentUser.role==='admin'?(currentCenterFilter!=='all'?currentCenterFilter:"All Centers"):currentUser.center}): ${todayPurchases.length} items\nTotal: ${formatTZS(totalToday)}\n\n`+todayPurchases.map(p=>`- ${p.item} | ${p.quantity} x ${formatTZS(p.unitPrice)} = ${formatTZS(p.total)} | Center: ${p.center}`).join('\n'); window.open(`mailto:${encodeURIComponent(ceoEmail)}?subject=Daily Purchase Report&body=${encodeURIComponent(body)}`,'_blank'); }
+        
+        function loadCeoEmail(){ let e=localStorage.getItem('ceo_email_address'); if(e){ ceoEmail=e; ceoEmailInput.value=e; } }
+        function saveCeoEmail(){ let e=ceoEmailInput.value.trim(); if(e && !e.includes('@')) return alert("Invalid email"); ceoEmail=e; localStorage.setItem('ceo_email_address',e); alert("Saved"); }
+        function loadCeoWhatsapp(){ let w=localStorage.getItem('ceo_whatsapp_numbers'); if(w){ ceoWhatsappNumbers=w; ceoWhatsappInput.value=w; } else { ceoWhatsappNumbers="255713381496"; ceoWhatsappInput.value="255713381496"; localStorage.setItem('ceo_whatsapp_numbers',ceoWhatsappNumbers); } }
+        function saveCeoWhatsapp(){ let wa=ceoWhatsappInput.value.trim(); let parts=wa.split(',').map(p=>p.trim()).filter(p=>p); for(let p of parts){ let d=p.replace(/\D/g,''); if(d.length<9||d.length>15) return alert(`Invalid: ${p}`); } ceoWhatsappNumbers=wa; localStorage.setItem('ceo_whatsapp_numbers',wa); alert("Saved"); }
+
+        function updateProfileUI() { let pic = currentUser.photo || `https://ui-avatars.com/api/?background=2c6e2f&color=fff&name=${currentUser.username}`; document.getElementById('profileImg').src = pic; document.getElementById('modalProfilePreview').src = pic; document.getElementById('profileName').innerText = currentUser.username; }
+        function showPOS() {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('posContent').style.display = 'block';
+            loadPurchases(); populateCenterSelects(); renderPurchasesTable(); updateProfileUI(); loadCeoEmail(); loadCeoWhatsapp();
+            let adminPanel = document.getElementById('adminOnlyPanel');
+            if(currentUser.role === 'admin') adminPanel.style.display = 'block'; else adminPanel.style.display = 'none';
+        }
+        function logout() { currentUser = null; document.getElementById('loginOverlay').style.display = 'flex'; document.getElementById('posContent').style.display = 'none'; }
+
+        // User Management Modal with search
+        function refreshUsersList() {
+            let users = getUsers();
+            let filteredUsers = users.filter(u => 
+                userSearchTerm === "" || 
+                u.username.toLowerCase().includes(userSearchTerm.toLowerCase()) || 
+                (u.center && u.center.toLowerCase().includes(userSearchTerm.toLowerCase()))
+            );
+            let container = document.getElementById('usersList');
+            container.innerHTML = '<h4 class="section-heading">Existing Accounts</h4>';
+            if (filteredUsers.length === 0) {
+                container.innerHTML += '<div class="user-row">No matching accounts found.</div>';
+            } else {
+                filteredUsers.forEach(u => {
+                    let div = document.createElement('div'); div.className = 'user-row';
+                    div.innerHTML = `<span><strong>${u.username}</strong> (${u.role==='admin'?'Admin':`Center: ${u.center || 'N/A'}`})</span>${u.username !== 'admin' ? `<button class="btn-outline btn-sm delete-user" data-user="${u.username}">Delete</button>` : ''}`;
+                    container.appendChild(div);
+                });
+            }
+            document.querySelectorAll('.delete-user').forEach(btn => btn.addEventListener('click', (e) => { let uname = btn.getAttribute('data-user'); if(confirm(`Delete user ${uname}?`)) { deleteUserAccount(uname); refreshUsersList(); populateCenterSelects(); renderPurchasesTable(); } }));
+        }
+        function showUsersModal() { 
+            userSearchTerm = "";
+            const searchInput = document.getElementById('userSearchInput');
+            if (searchInput) searchInput.value = "";
+            refreshUsersList(); 
+            document.getElementById('usersModal').style.display = 'flex'; 
+        }
+
+        function initDarkMode() { let dark = localStorage.getItem('darkMode') === 'true'; if(dark) document.body.classList.add('dark'); else document.body.classList.remove('dark'); document.querySelector('#darkModeToggle i').className = dark ? 'fas fa-sun' : 'fas fa-moon'; }
+        function toggleDarkMode() { let isDark = document.body.classList.toggle('dark'); localStorage.setItem('darkMode', isDark); document.querySelector('#darkModeToggle i').className = isDark ? 'fas fa-sun' : 'fas fa-moon'; }
 
         function bindEvents() {
             document.getElementById('purchaseForm').addEventListener('submit', submitPurchase);
             cancelEditBtn.addEventListener('click', resetFormToAdd);
-            quantityInput.addEventListener('input', updateLiveTotalPreview);
-            unitPriceInput.addEventListener('input', updateLiveTotalPreview);
+            document.getElementById('quantity').addEventListener('input', updateLiveTotalPreview);
+            document.getElementById('unitPrice').addEventListener('input', updateLiveTotalPreview);
             searchInput.addEventListener('input', () => { searchTerm = searchInput.value.toLowerCase(); renderPurchasesTable(); });
             clearSearchBtn.addEventListener('click', () => { searchInput.value = ''; searchTerm = ''; renderPurchasesTable(); });
             clearAllBtn.addEventListener('click', deleteAllPurchases);
@@ -797,34 +547,47 @@
             emailDailyReportBtn.addEventListener('click', sendEmailDailyReport);
             saveCeoEmailBtn.addEventListener('click', saveCeoEmail);
             saveCeoWhatsappBtn.addEventListener('click', saveCeoWhatsapp);
-            document.getElementById('changePasswordBtn').addEventListener('click', openModal);
+            document.getElementById('changePasswordBtn').addEventListener('click', () => profileModal.style.display = 'flex');
             document.getElementById('logoutBtn').addEventListener('click', logout);
-            document.getElementById('profileImg').addEventListener('click', openModal);
+            document.getElementById('profileImg').addEventListener('click', () => profileModal.style.display = 'flex');
             document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+            if(currentUser.role === 'admin') {
+                document.getElementById('manageUsersBtn').addEventListener('click', showUsersModal);
+                document.getElementById('addUserBtn').addEventListener('click', () => { 
+                    let uname = document.getElementById('newUsername').value.trim(); 
+                    let pwd = document.getElementById('newUserPassword').value; 
+                    let center = document.getElementById('newUserCenter').value.trim(); 
+                    if(!uname || !pwd || !center) return alert("All fields required"); 
+                    if(pwd.length < 4) return alert("Password min 4 chars"); 
+                    if(addUserAccount(uname, pwd, center)) { 
+                        alert("User created"); 
+                        document.getElementById('newUsername').value=''; 
+                        document.getElementById('newUserPassword').value=''; 
+                        document.getElementById('newUserCenter').value=''; 
+                        refreshUsersList(); 
+                        populateCenterSelects();
+                        renderPurchasesTable(); 
+                    } else alert("Username exists"); 
+                });
+                const userSearchInput = document.getElementById('userSearchInput');
+                if (userSearchInput) {
+                    userSearchInput.addEventListener('input', (e) => { userSearchTerm = e.target.value.toLowerCase(); refreshUsersList(); });
+                }
+            }
+            saveProfileBtn.addEventListener('click', () => { let newPass = newPasswordInput.value.trim(); if(newPass) { if(newPass !== confirmPasswordInput.value) return alert("Passwords mismatch"); if(newPass.length<4) return alert("Min 4 chars"); updateUserPassword(currentUser.username, newPass); alert("Password changed"); } let file = profileUpload.files[0]; if(file) { let reader = new FileReader(); reader.onload = (ev) => { updateUserPhoto(currentUser.username, ev.target.result); currentUser.photo = ev.target.result; updateProfileUI(); }; reader.readAsDataURL(file); } profileModal.style.display = 'none'; });
+            closeModalBtn.addEventListener('click', () => profileModal.style.display = 'none');
+            document.getElementById('closeUsersModalBtn').addEventListener('click', () => document.getElementById('usersModal').style.display = 'none');
+            profileUpload.addEventListener('change', function(e) { if(e.target.files[0]) { let r = new FileReader(); r.onload = (ev) => { updateUserPhoto(currentUser.username, ev.target.result); currentUser.photo = ev.target.result; updateProfileUI(); }; r.readAsDataURL(e.target.files[0]); } });
         }
 
         document.getElementById('loginBtn').addEventListener('click', () => {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            if(verifyLogin(username, password)) {
-                showPOS();
-                bindEvents();
-                loadCeoEmail();
-                loadCeoWhatsapp();
-                loadInitialData();
-                renderPurchasesTable();
-                updateStats();
-                updateProfileUI();
-                document.getElementById('loginError').innerText = '';
-            } else {
-                document.getElementById('loginError').innerText = 'Invalid username or password';
-            }
+            let uname = document.getElementById('loginUsername').value.trim();
+            let pwd = document.getElementById('loginPassword').value;
+            let user = validateLogin(uname, pwd);
+            if(user) { currentUser = user; showPOS(); bindEvents(); } else { document.getElementById('loginError').innerText = 'Invalid credentials'; }
         });
         document.getElementById('loginPassword').addEventListener('keypress', (e) => { if(e.key === 'Enter') document.getElementById('loginBtn').click(); });
-
-        loadUserData();
-        initDarkMode();
-        showLogin();
+        initDefaultUsers(); initDarkMode(); 
     </script>
 </body>
 </html>
