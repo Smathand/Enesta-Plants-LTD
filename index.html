@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Light mode & dark mode - same as original with consistency */
+        /* Light mode & dark mode */
         :root {
             --bg-body: #f0f2f5;
             --text-primary: #1e293b;
@@ -262,7 +262,7 @@
                         <div class="table-wrapper">
                             <table id="purchasesTable">
                                 <thead><tr><th>Item</th><th>Supplier</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Date</th><th>Center</th><th>Actions</th></tr></thead>
-                                <tbody id="tableBody"><tr class="empty-row"><td colspan="8">No purchases recorded. Add your first purchase.</td></tr></tbody>
+                                <tbody id="tableBody"><tr class="empty-row"><td colspan="8">No purchases recorded. Add your first purchase.2</tbody>
                             </table>
                         </div>
                         <div class="footer-actions">
@@ -323,7 +323,7 @@
     </div>
 
     <script>
-        // ----- FIX: get local today's date in YYYY-MM-DD (prevents yesterday due to UTC offset)
+        // ----- CRITICAL FIX: Use local date without timezone conversion -----
         function getLocalTodayDate() {
             const now = new Date();
             const year = now.getFullYear();
@@ -331,7 +331,16 @@
             const day = String(now.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         }
-
+        
+        // Format date safely from YYYY-MM-DD string without Date object (avoids timezone shift)
+        function formatDateSafe(dateStr) {
+            if (!dateStr) return '';
+            const [year, month, day] = dateStr.split('-');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const monthIndex = parseInt(month, 10) - 1;
+            return `${months[monthIndex]} ${parseInt(day, 10)}, ${year}`;
+        }
+        
         // ----- Users & Auth -----
         let currentUser = null;
         let purchases = [];
@@ -385,12 +394,13 @@
             const stored = localStorage.getItem('construction_pos_center_purchases');
             if (stored) purchases = JSON.parse(stored);
             if (!purchases || purchases.length === 0) {
+                const today = getLocalTodayDate();
                 purchases = [
                     { id: 1001, item: "Portland Simiti (Tons)", supplier: "Twiga Cement", quantity: 12, unitPrice: 28500, date: "2025-02-10", total: 342000, center: "Main Site - Arusha" },
                     { id: 1002, item: "Steel Rebar #4 (Pcs)", supplier: "Mabati Rolling Mills", quantity: 450, unitPrice: 6200, date: "2025-02-12", total: 2790000, center: "Downtown Tower" },
                     { id: 1003, item: "Timber Mbao 2x4", supplier: "Kilimanjaro Forest", quantity: 800, unitPrice: 4800, date: "2025-02-14", total: 3840000, center: "Main Site - Arusha" },
                     { id: 1004, item: "Concrete Blocks", supplier: "BlockMaster TZ", quantity: 1200, unitPrice: 1850, date: "2025-02-18", total: 2220000, center: "Kigamboni Bridge" },
-                    { id: 1005, item: "Mabati (Roofing Sheets)", supplier: "Steelplus Ltd", quantity: 320, unitPrice: 18750, date: getLocalTodayDate(), total: 6000000, center: "Downtown Tower" }
+                    { id: 1005, item: "Mabati (Roofing Sheets)", supplier: "Steelplus Ltd", quantity: 320, unitPrice: 18750, date: today, total: 6000000, center: "Downtown Tower" }
                 ];
                 savePurchases();
             }
@@ -409,28 +419,28 @@
             let filtered = purchases.filter(p => searchTerm === "" || p.item.toLowerCase().includes(searchTerm) || (p.supplier && p.supplier.toLowerCase().includes(searchTerm)));
             if (currentUser.role === "center") filtered = filtered.filter(p => p.center === currentUser.center);
             else if (currentCenterFilter !== 'all') filtered = filtered.filter(p => p.center === currentCenterFilter);
-            return filtered.sort((a,b)=> new Date(b.date) - new Date(a.date));
+            // Sort by date descending using string comparison (YYYY-MM-DD is lexicographically sortable)
+            return filtered.sort((a, b) => b.date.localeCompare(a.date));
         }
 
         function formatTZS(v) { return 'TZS ' + Math.round(v).toLocaleString('en-US'); }
         function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
-        function formatDate(d) { return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
         function updateStats() { let f = getFilteredPurchases(); let total = f.reduce((s,p)=>s+p.total,0); document.getElementById('totalSpentAmount').innerHTML = formatTZS(total); document.getElementById('totalTransactions').innerText = f.length; let avg = f.length ? total/f.length : 0; document.getElementById('avgPurchase').innerHTML = formatTZS(avg); }
         
         function renderPurchasesTable() {
             let filtered = getFilteredPurchases();
-            if(filtered.length === 0) { tableBody.innerHTML = `<tr class="empty-row"><td colspan="8">No purchases. Add your first purchase.</td></tr>`; updateStats(); return; }
+            if(filtered.length === 0) { tableBody.innerHTML = `<tr class="empty-row"><td colspan="8">No purchases. Add your first purchase.2`; updateStats(); return; }
             let html = '';
             filtered.forEach(p => { html += `<tr>
-                     <td><strong>${escapeHtml(p.item)}</strong></td>
-                     <td>${escapeHtml(p.supplier||'—')}</td>
-                     <td>${p.quantity}</td>
-                     <td>${formatTZS(p.unitPrice)}</td>
-                     <td>${formatTZS(p.total)}</td>
-                     <td>${formatDate(p.date)}</td>
-                     <td><span class="center-badge">${escapeHtml(p.center)}</span></td>
+                    <td><strong>${escapeHtml(p.item)}</strong></td>
+                    <td>${escapeHtml(p.supplier||'—')}</td>
+                    <td>${p.quantity}</td>
+                    <td>${formatTZS(p.unitPrice)}</td>
+                    <td>${formatTZS(p.total)}</td>
+                    <td>${formatDateSafe(p.date)}</td>
+                    <td><span class="center-badge">${escapeHtml(p.center)}</span></td>
                     <td class="action-icons"><i class="fas fa-edit" data-id="${p.id}"></i> <i class="fas fa-trash-alt" data-id="${p.id}"></i></td>
-                 </tr>`; });
+                </tr>`; });
             tableBody.innerHTML = html;
             document.querySelectorAll('.fa-edit').forEach(icon => icon.addEventListener('click', e => startEditPurchase(parseInt(icon.dataset.id))));
             document.querySelectorAll('.fa-trash-alt').forEach(icon => icon.addEventListener('click', e => deletePurchaseById(parseInt(icon.dataset.id))));
@@ -471,7 +481,6 @@
             renderFilterButtons();
         }
 
-        // FIX: reset form with LOCAL today's date instead of UTC-based string
         function resetFormToAdd() { 
             editingId = null; 
             document.getElementById('formTitle').innerText = "Record Purchase"; 
@@ -481,7 +490,7 @@
             document.getElementById('supplier').value = ''; 
             document.getElementById('quantity').value = '1'; 
             document.getElementById('unitPrice').value = ''; 
-            // CRITICAL FIX: Use local date instead of UTC to prevent "yesterday" issue
+            // Set date to local today (no UTC shift)
             document.getElementById('purchaseDate').value = getLocalTodayDate(); 
             updateLiveTotalPreview(); 
             if(currentUser.role !== 'center') { 
@@ -500,14 +509,14 @@
         function deletePurchaseById(id){ purchases=purchases.filter(p=>p.id!==id); if(editingId===id) resetFormToAdd(); savePurchases(); renderPurchasesTable(); }
         function deleteAllPurchases(){ if(purchases.length && confirm("Delete ALL purchases?")){ purchases=[]; savePurchases(); renderPurchasesTable(); } }
 
-        // Reporting (unchanged)
+        // Reporting (using safe date formatter)
         function getWhatsAppReportText() {
             let filtered = getFilteredPurchases();
             let total = filtered.reduce((s,p)=>s+p.total,0);
             let transactionCount = filtered.length;
             let last5 = filtered.slice(0,5);
             let details = last5.length ? "\n🔹 *Recent purchases:*\n" : "";
-            last5.forEach(p=>details+=`• ${p.item} | ${p.quantity} x ${formatTZS(p.unitPrice)} = ${formatTZS(p.total)} | Center: ${p.center} | ${formatDate(p.date)}\n`);
+            last5.forEach(p=>details+=`• ${p.item} | ${p.quantity} x ${formatTZS(p.unitPrice)} = ${formatTZS(p.total)} | Center: ${p.center} | ${formatDateSafe(p.date)}\n`);
             return `🏗️ *ENESTA REPORT* 🏗️\n${currentUser.role==='admin'?`Filter: ${currentCenterFilter!=='all'?currentCenterFilter:"All Centers"}`:`Center: ${currentUser.center}`}\n💰 *Total:* ${formatTZS(total)}\n📦 *Orders:* ${transactionCount}\n${details}`;
         }
         function sendWhatsAppReport() { if(!purchases.length) return alert("No purchases"); let nums = ceoWhatsappNumbers.split(',').map(n=>n.trim()).filter(n=>n); if(!nums.length) return alert("Save WhatsApp numbers"); let txt = encodeURIComponent(getWhatsAppReportText()); nums.forEach(n=>{ let clean=n.replace(/\D/g,''); if(clean.startsWith('0')) clean='255'+clean.substring(1); if(!clean.startsWith('255')) clean='255'+clean; window.open(`https://wa.me/${clean}?text=${txt}`,'_blank'); }); alert(`Opened for ${nums.length} recipient(s)`); }
@@ -525,7 +534,7 @@
             loadPurchases(); populateCenterSelects(); renderPurchasesTable(); updateProfileUI(); loadCeoEmail(); loadCeoWhatsapp();
             let adminPanel = document.getElementById('adminOnlyPanel');
             if(currentUser.role === 'admin') adminPanel.style.display = 'block'; else adminPanel.style.display = 'none';
-            resetFormToAdd(); // ensure form reset uses proper date after login
+            resetFormToAdd();
         }
         function logout() { currentUser = null; document.getElementById('loginOverlay').style.display = 'flex'; document.getElementById('posContent').style.display = 'none'; }
 
